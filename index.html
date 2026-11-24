@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Abdulhafiz Akademiyasi — Ona tili, Matematika va IT onlayn ta'lim platformasi</title>
   <meta name="description" content="Abdulhafiz Akademiyasi: Ona tili, Matematika va IT dasturlash fanlarini interaktiv tarzda o'rganing. Google hisob orqali kirish, reyting va fikr almashish." />
-  <meta name="keywords" content="Abdulhafiz Akademiyasi, ona tili darslari, matematika darslari, it dasturlash, onlayn ta'lim, reyting, o'zbekcha kurslar" />
+  <meta name="keywords" content="Abdulhafiz Akademiyasi, ona tili darslari, matematika darslari, it dasturlash, onlayn ta'lim, reyting, o'zbekcha kurslar, ingliz tili oyini" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://abdulhafiz-akademiya.uz/" />
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2310b981'/%3E%3Cpolygon points='32,14 16,48 48,48' fill='%23ffffff'/%3E%3Cpath d='M32 22L24.2 41H27L28.9 36.2H35.1L37 41H39.8L32 22ZM29.9 34L32 28.7L34.1 34H29.9Z' fill='%2310b981'/%3E%3C/svg%3E" />
 
   <meta property="og:title" content="Abdulhafiz Akademiyasi — Interaktiv darslar" />
-  <meta property="og:description" content="Ona tili, Matematika va IT fanlaridan darslar, testlar, o'quvchilar reytingi va fikr almashish maydoni." />
+  <meta property="og:description" content="Ona tili, Matematika va IT fanlaridan darslar, testlar, ingliz tili o'yini, reyting va fikr almashish maydoni." />
   <meta property="og:type" content="website" />
 
   <script type="application/ld+json">
@@ -27,6 +27,7 @@
 
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -43,8 +44,8 @@
       --danger: #ef4444;
       --text: #f8fafc;
       --text-dim: #94a3b8;
-      --header-bg: rgba(9, 13, 22, 0.92);
-      --sidebar-bg: rgba(13, 19, 32, 0.95);
+      --header-bg: rgba(9, 13, 22, 0.94);
+      --sidebar-bg: rgba(13, 19, 32, 0.96);
       --modal-bg: #111827;
       --code-bg: #04070d;
       --font-scale: 1;
@@ -62,7 +63,7 @@
       --danger: #dc2626;
       --text: #0f172a;
       --text-dim: #475569;
-      --header-bg: rgba(255, 255, 255, 0.95);
+      --header-bg: rgba(255, 255, 255, 0.96);
       --sidebar-bg: #ffffff;
       --modal-bg: #ffffff;
       --code-bg: #0f172a;
@@ -102,8 +103,8 @@
       border: 1px solid var(--glass-border);
       backdrop-filter: blur(20px);
       border-radius: 28px;
-      padding: 2.5rem 2rem;
-      max-width: 440px;
+      padding: 2.35rem 1.85rem;
+      max-width: 455px;
       width: 100%;
       text-align: center;
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
@@ -112,7 +113,7 @@
     .gate-logo {
       width: 64px;
       height: 64px;
-      margin: 0 auto 1.25rem;
+      margin: 0 auto 1.15rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -121,16 +122,54 @@
     }
 
     .gate-card h1 {
-      font-size: 1.75rem;
+      font-size: 1.7rem;
       font-weight: 800;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
     }
 
     .gate-card p {
       color: var(--text-dim);
-      font-size: 0.95rem;
+      font-size: 0.93rem;
       line-height: 1.55;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .auth-mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      background: var(--surface);
+      padding: 0.35rem;
+      border-radius: 14px;
+      border: 1px solid var(--glass-border);
+      margin-bottom: 1rem;
+    }
+
+    .auth-mode-btn {
+      padding: 0.55rem 0.7rem;
+      border: none;
+      border-radius: 11px;
+      background: transparent;
+      color: var(--text-dim);
+      font-weight: 700;
+      font-size: 0.86em;
+      cursor: pointer;
+    }
+
+    .auth-mode-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .email-notice-box {
+      margin-top: 0.85rem;
+      padding: 0.85rem 1rem;
+      border-radius: 13px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      font-size: 0.88em;
+      line-height: 1.55;
+      text-align: left;
     }
 
     #app-shell {
@@ -147,30 +186,62 @@
       background: var(--header-bg);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--glass-border);
-      padding: 0.8rem 2.25%;
+      padding: 0.75rem 1.35rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       position: sticky;
       top: 0;
-      z-index: 100;
-      gap: 0.75rem;
-      flex-wrap: wrap;
+      z-index: 120;
+      gap: 0.65rem;
+      height: 64px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      min-width: 0;
+    }
+
+    .hamburger-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1.25rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .hamburger-btn:hover {
+      border-color: var(--primary);
+      background: var(--surface-hover);
+      color: var(--primary);
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.6rem;
       font-weight: 800;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       cursor: pointer;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .logo-icon {
-      width: 36px;
-      height: 36px;
+      width: 35px;
+      height: 35px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -183,34 +254,16 @@
       display: flex;
       align-items: center;
       gap: 0.45rem;
-      flex-wrap: wrap;
-    }
-
-    .tool-btn {
-      background: var(--surface);
-      border: 1px solid var(--glass-border);
-      color: var(--text);
-      padding: 0.42rem 0.68rem;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.82em;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .tool-btn:hover {
-      background: var(--surface-hover);
-      border-color: var(--primary);
+      flex-shrink: 0;
     }
 
     .pill {
       background: var(--surface);
       border: 1px solid var(--glass-border);
-      padding: 0.42rem 0.78rem;
+      padding: 0.4rem 0.75rem;
       border-radius: 999px;
       font-weight: 700;
-      font-size: 0.82em;
+      font-size: 0.8em;
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
@@ -238,10 +291,10 @@
     .user-profile {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.48rem;
       background: var(--surface);
       border: 1px solid var(--glass-border);
-      padding: 0.28rem 0.75rem 0.28rem 0.32rem;
+      padding: 0.26rem 0.7rem 0.26rem 0.3rem;
       border-radius: 999px;
       cursor: pointer;
       white-space: nowrap;
@@ -268,6 +321,91 @@
       object-fit: cover;
     }
 
+    .menu-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(4px);
+      display: none;
+      z-index: 180;
+    }
+
+    .menu-drawer-backdrop.open {
+      display: block;
+    }
+
+    .menu-drawer {
+      position: fixed;
+      top: 64px;
+      left: 0;
+      width: 285px;
+      max-width: 86vw;
+      height: calc(100vh - 64px);
+      background: var(--modal-bg);
+      border-right: 1px solid var(--glass-border);
+      box-shadow: 20px 0 50px rgba(0, 0, 0, 0.4);
+      padding: 1.05rem 0.85rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.4rem;
+      z-index: 190;
+      overflow-y: auto;
+    }
+
+    .menu-drawer.open {
+      display: flex;
+      animation: drawerIn 0.2s ease;
+    }
+
+    @keyframes drawerIn {
+      from { transform: translateX(-16px); opacity: 0.4; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .drawer-section-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-dim);
+      padding: 0.4rem 0.75rem 0.15rem;
+    }
+
+    .drawer-item-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      padding: 0.72rem 0.85rem;
+      border-radius: 13px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.18s ease;
+    }
+
+    .drawer-item-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--glass-border);
+    }
+
+    .drawer-item-btn.active {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--primary);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .drawer-sep {
+      height: 1px;
+      background: var(--glass-border);
+      margin: 0.35rem 0;
+    }
+
     .workspace-layout {
       display: flex;
       flex: 1;
@@ -275,14 +413,14 @@
     }
 
     .side-rail {
-      width: 74px;
+      width: 78px;
       background: var(--sidebar-bg);
       border-right: 1px solid var(--glass-border);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1.1rem 0.45rem;
-      gap: 0.65rem;
+      padding: 1rem 0.4rem;
+      gap: 0.55rem;
       position: sticky;
       top: 64px;
       height: calc(100vh - 64px);
@@ -290,9 +428,9 @@
     }
 
     .rail-btn {
-      width: 56px;
+      width: 60px;
       height: 54px;
-      border-radius: 16px;
+      border-radius: 15px;
       border: 1px solid transparent;
       background: transparent;
       color: var(--text-dim);
@@ -300,15 +438,16 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.2rem;
+      gap: 0.18rem;
       cursor: pointer;
       transition: all 0.2s ease;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 700;
+      text-align: center;
     }
 
     .rail-btn span.rail-ico {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       line-height: 1;
     }
 
@@ -428,7 +567,7 @@
 
     .subjects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
       gap: 1.5rem;
       margin-bottom: 2rem;
     }
@@ -554,7 +693,7 @@
       color: var(--text);
       padding: 0.68rem 1.1rem;
       border-radius: 13px;
-      width: 250px;
+      width: 240px;
       max-width: 100%;
       font-size: 0.92em;
       outline: none;
@@ -566,7 +705,7 @@
 
     .lessons-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
       gap: 1rem;
     }
 
@@ -737,6 +876,79 @@
       font-size: 1.3em;
       font-weight: 800;
       margin: 0.55rem 0;
+    }
+
+    /* Ingliz tili so'z zanjiri o'yini uslublari */
+    .word-game-banner {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.16), rgba(16, 185, 129, 0.16));
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 1.35rem;
+      margin-bottom: 1.35rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .required-letter-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      height: 46px;
+      padding: 0 0.7rem;
+      border-radius: 14px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 1.45rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .score-cards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .player-score-card {
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 1rem;
+    }
+
+    .player-score-card.turn-active {
+      border-color: var(--primary);
+      background: rgba(16, 185, 129, 0.11);
+    }
+
+    .word-chain-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1rem;
+    }
+
+    .word-chip {
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .word-chip span.last-ch {
+      color: var(--primary);
+      text-decoration: underline;
     }
 
     .leaderboard-row {
@@ -975,45 +1187,48 @@
         right: 0;
         flex-direction: row;
         justify-content: space-around;
-        padding: 0.35rem 0.4rem;
+        padding: 0.35rem 0.35rem;
         border-right: none;
         border-top: 1px solid var(--glass-border);
         z-index: 150;
       }
       .rail-btn {
         width: auto;
-        min-width: 52px;
+        min-width: 50px;
         height: 50px;
-        padding: 0.25rem 0.45rem;
+        padding: 0.25rem 0.4rem;
         border-radius: 12px;
       }
       .rail-divider {
         display: none;
       }
       header {
-        padding: 0.65rem 3.5%;
+        padding: 0.65rem 0.85rem;
       }
       .logo {
-        font-size: 1.05rem;
+        font-size: 1rem;
       }
       .pill.role-teacher, .pill.role-admin {
         display: none;
       }
+      .user-profile span:last-child {
+        display: none;
+      }
       main {
-        padding: 1.25rem 1rem;
+        padding: 1.2rem 0.95rem;
       }
       .hero {
-        padding: 1.5rem 1.2rem;
+        padding: 1.45rem 1.15rem;
         gap: 1.2rem;
       }
       .hero h1 {
-        font-size: 1.6rem;
+        font-size: 1.55rem;
       }
       .progress-widget {
         min-width: 100%;
       }
       .panel-box {
-        padding: 1.25rem;
+        padding: 1.2rem;
       }
       .toast {
         bottom: 76px;
@@ -1024,7 +1239,7 @@
     }
 
     @media print {
-      header, .side-rail, .hero, .subjects-grid, .top-bar, .tabs, footer, #toast {
+      header, .side-rail, .menu-drawer, .menu-drawer-backdrop, .hero, .subjects-grid, .top-bar, .tabs, footer, #toast {
         display: none !important;
       }
       body, .panel-box, .certificate-box {
@@ -1050,85 +1265,155 @@
         </svg>
       </div>
       <h1>Abdulhafiz Akademiyasi</h1>
-      <p>Darslar, testlar, reyting va fikr almashish bo‘limlariga kirish uchun avval <strong>Google hisobingiz</strong> bilan kiring.</p>
+      <p>Darslar, testlar, ingliz tili o‘yini, reyting va fikr almashish bo‘limlariga kirish uchun usulni tanlang.</p>
 
-      <div id="g_id_onload"
-           data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
-           data-callback="handleCredentialResponse"
-           data-auto_prompt="false">
+      <div class="auth-mode-tabs">
+        <button type="button" class="auth-mode-btn active" id="mode-btn-email" onclick="switchAuthMode('email')">✉️ Google / Email</button>
+        <button type="button" class="auth-mode-btn" id="mode-btn-phone" onclick="switchAuthMode('phone')">📱 SMS / Telefon</button>
       </div>
-      <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="pill" style="display: flex; justify-content: center; margin-bottom: 1.25rem;"></div>
 
-      <div style="border-top: 1px solid var(--glass-border); padding-top: 1.15rem; text-align: left;">
-        <p style="font-size: 0.82rem; color: var(--text-dim); margin-bottom: 0.5rem; text-align: center;">
-          Google hisob bilan kirish (Admin: <strong style="color:var(--secondary);">abdulhafiz@gmail.com</strong>):
-        </p>
-        <input type="text" id="gate-name" class="modal-input" placeholder="Ismingiz (masalan: Abdulhafiz)" />
-        <input type="email" id="gate-email" class="modal-input" placeholder="Gmail manzilingiz (masalan: abdulhafiz@gmail.com)" />
-        <button class="btn" style="width: 100%; justify-content: center; margin-top: 0.6rem;" onclick="loginFromGate()">
-          Google hisob orqali kirish →
+      <div id="auth-mode-email" style="text-align: left;">
+        <div id="g_id_onload"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="pill" style="display: flex; justify-content: center; margin-bottom: 1rem;"></div>
+
+        <input type="text" id="gate-name" class="modal-input" placeholder="Ismingiz" />
+        <input type="email" id="gate-email" class="modal-input" placeholder="Email manzilingiz" />
+        <textarea id="gate-email-msg" class="modal-textarea" rows="2" placeholder="Emailga yuboriladigan xabar (ixtiyoriy)"></textarea>
+
+        <div style="display: flex; gap: 0.55rem; flex-wrap: wrap; margin-top: 0.45rem;">
+          <button type="button" class="btn btn-purple" style="flex: 1; justify-content: center;" onclick="sendEmailNotificationCode()">
+            📧 Emailga xabar yuborish
+          </button>
+          <button type="button" class="btn" style="flex: 1; justify-content: center;" onclick="loginFromGate()">
+            Kirish →
+          </button>
+        </div>
+
+        <div id="email-code-verify-box" style="display: none; margin-top: 0.85rem; border-top: 1px solid var(--glass-border); padding-top: 0.8rem;">
+          <div id="email-sent-info" class="email-notice-box" style="margin-top: 0; margin-bottom: 0.65rem;"></div>
+          <input type="text" id="email-otp-input" class="modal-input" maxlength="6" placeholder="Emailga yuborilgan 6 xonali kodni kiriting" />
+          <button type="button" class="btn" style="width: 100%; justify-content: center; margin-top: 0.4rem;" onclick="verifyEmailCodeAndLogin()">
+            ✓ Kodni tasdiqlash va kirish
+          </button>
+        </div>
+      </div>
+
+      <div id="auth-mode-phone" style="display: none; text-align: left;">
+        <input type="text" id="phone-name" class="modal-input" placeholder="Ismingiz (ixtiyoriy)" />
+        <input type="tel" id="phone-number" class="modal-input" placeholder="Telefon raqam (+998901234567)" />
+        <div id="recaptcha-container" style="margin: 0.65rem 0; display: flex; justify-content: center;"></div>
+        <button type="button" class="btn" id="send-sms-btn" style="width: 100%; justify-content: center; margin-top: 0.4rem;" onclick="sendSmsCode()">
+          📩 SMS kod yuborish
         </button>
+
+        <div id="otp-verify-box" style="display: none; margin-top: 0.9rem; border-top: 1px solid var(--glass-border); padding-top: 0.85rem;">
+          <input type="text" id="sms-code-input" class="modal-input" maxlength="6" placeholder="SMS orqali kelgan 6 xonali kod" />
+          <button type="button" class="btn btn-purple" style="width: 100%; justify-content: center; margin-top: 0.45rem;" onclick="verifySmsCode()">
+            ✓ Kodni tasdiqlash va kirish
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <div id="app-shell">
     <header>
-      <div class="logo" onclick="goHome()">
-        <div class="logo-icon">
-          <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="64" height="64" rx="16" fill="#10b981" />
-            <polygon points="32,14 16,48 48,48" fill="#ffffff" />
-            <path d="M32 22L24.2 41H27L28.9 36.2H35.1L37 41H39.8L32 22ZM29.9 34L32 28.7L34.1 34H29.9Z" fill="#10b981" />
-          </svg>
+      <div class="header-left">
+        <button type="button" class="hamburger-btn" id="hamburger-menu-btn" onclick="toggleMenuDrawer()" aria-label="Menyuni ochish" title="Menyu">
+          ☰
+        </button>
+        <div class="logo" onclick="goHome()">
+          <div class="logo-icon">
+            <svg width="35" height="35" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="64" height="64" rx="16" fill="#10b981" />
+              <polygon points="32,14 16,48 48,48" fill="#ffffff" />
+              <path d="M32 22L24.2 41H27L28.9 36.2H35.1L37 41H39.8L32 22ZM29.9 34L32 28.7L34.1 34H29.9Z" fill="#10b981" />
+            </svg>
+          </div>
+          <span>Abdulhafiz<span style="color: var(--primary);">Akademiyasi</span></span>
         </div>
-        <span>Abdulhafiz<span style="color: var(--primary);">Akademiyasi</span></span>
       </div>
 
       <div class="nav-actions">
-        <button class="tool-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Qorong'i / Yorug' rejim">☀️ Yorug‘</button>
-        <button class="tool-btn" onclick="changeFontScale(-0.08)" title="Shriftni kichraytirish">A-</button>
-        <button class="tool-btn" onclick="changeFontScale(0.08)" title="Shriftni kattalashtirish">A+</button>
-
-        <div class="pill pct-pill">📊 <span id="header-progress-pct">0%</span> o‘rganildi</div>
+        <div class="pill pct-pill">📊 <span id="header-progress-pct">0%</span></div>
         <div id="role-pill-wrap"></div>
-
-        <button class="btn btn-ghost" id="admin-panel-btn" style="display: none; padding: 0.44rem 0.85rem;" onclick="openAdminView()">
-          🛡️ (<span id="pending-badge-count">0</span>)
-        </button>
-
         <div id="auth-container"></div>
       </div>
     </header>
 
+    <div class="menu-drawer-backdrop" id="menu-drawer-backdrop" onclick="closeMenuDrawer()"></div>
+    <nav class="menu-drawer" id="menu-drawer" aria-label="Asosiy menyu">
+      <div class="drawer-section-label">Bo‘limlar</div>
+      <button type="button" class="drawer-item-btn active" id="drawer-courses" onclick="selectMenuAction('courses')">
+        <span>🏠 Darslar</span>
+        <span>→</span>
+      </button>
+      <button type="button" class="drawer-item-btn" id="drawer-wordgame" onclick="selectMenuAction('wordgame')">
+        <span>🔤 Ingliz tili o‘yini</span>
+        <span>2P</span>
+      </button>
+      <button type="button" class="drawer-item-btn" id="drawer-rating" onclick="selectMenuAction('rating')">
+        <span>🏆 Reyting</span>
+        <span>→</span>
+      </button>
+      <button type="button" class="drawer-item-btn" id="drawer-forum" onclick="selectMenuAction('forum')">
+        <span>💬 Fikr almashish</span>
+        <span>→</span>
+      </button>
+      <button type="button" class="drawer-item-btn" id="drawer-admin" style="display: none;" onclick="selectMenuAction('admin')">
+        <span>🛡️ Admin paneli</span>
+        <span id="drawer-pending-count">0</span>
+      </button>
+
+      <div class="drawer-sep"></div>
+      <div class="drawer-section-label">Ko‘rinish va matn</div>
+
+      <button type="button" class="drawer-item-btn" onclick="toggleTheme()">
+        <span id="drawer-theme-label">☀️ Yorug‘ rejim</span>
+        <span>Rejim</span>
+      </button>
+      <button type="button" class="drawer-item-btn" onclick="changeFontScale(0.08)">
+        <span>🔍 Shriftni kattalashtirish</span>
+        <span>A+</span>
+      </button>
+      <button type="button" class="drawer-item-btn" onclick="changeFontScale(-0.08)">
+        <span>🔎 Shriftni kichraytirish</span>
+        <span>A-</span>
+      </button>
+    </nav>
+
     <div class="workspace-layout">
-      <aside class="side-rail" aria-label="Yon panel">
-        <button class="rail-btn active" id="rail-courses" onclick="goHome()" title="Darslar">
+      <aside class="side-rail" aria-label="Tezkor panel">
+        <button type="button" class="rail-btn active" id="rail-courses" onclick="goHome()" title="Darslar">
           <span class="rail-ico">🏠</span>
           <span>Darslar</span>
         </button>
-        <button class="rail-btn" id="rail-rating" onclick="openRatingView()" title="Reyting">
+        <button type="button" class="rail-btn" id="rail-wordgame" onclick="openWordGameView()" title="Ingliz tili o'yini">
+          <span class="rail-ico">🔤</span>
+          <span>Eng O‘yin</span>
+        </button>
+        <button type="button" class="rail-btn" id="rail-rating" onclick="openRatingView()" title="Reyting">
           <span class="rail-ico">🏆</span>
           <span>Reyting</span>
         </button>
-        <button class="rail-btn" id="rail-forum" onclick="openForumView()" title="Fikr almashish">
+        <button type="button" class="rail-btn" id="rail-forum" onclick="openForumView()" title="Fikr almashish">
           <span class="rail-ico">💬</span>
           <span>Forum</span>
         </button>
-        <button class="rail-btn" id="rail-admin" style="display: none;" onclick="openAdminView()" title="Boshqaruv">
+        <button type="button" class="rail-btn" id="rail-admin" style="display: none;" onclick="openAdminView()" title="Boshqaruv">
           <span class="rail-ico">🛡️</span>
           <span>Admin</span>
         </button>
 
         <div class="rail-divider"></div>
 
-        <button class="rail-btn" onclick="toggleTheme()" title="Qorong'i / Yorug' rejim">
+        <button type="button" class="rail-btn" onclick="toggleTheme()" title="Qorong'i / Yorug' rejim">
           <span class="rail-ico" id="rail-theme-ico">☀️</span>
           <span>Rejim</span>
-        </button>
-        <button class="rail-btn" onclick="changeFontScale(0.08)" title="Shriftni kattalashtirish">
-          <span class="rail-ico">🔍</span>
-          <span>Katta</span>
         </button>
       </aside>
 
@@ -1138,12 +1423,13 @@
             <div class="hero-text">
               <span class="badge-tag">ABDULHAFIZ AKADEMIYASI • INTERAKTIV TA'LIM</span>
               <h1>Bilim oling, reytingda ko‘tariling va fikr almashing</h1>
-              <p>Ona tili, Matematika va IT dasturlash darslari. Darslarni yakunlang, batafsil izohlar bilan test ishlang va sertifikatga ega bo‘ling.</p>
+              <p>Ona tili, Matematika va IT dasturlash darslari. Darslarni yakunlang, batafsil izohlar bilan test ishlang, ingliz tili o‘yinida qatnashing va sertifikatga ega bo‘ling.</p>
 
               <div class="hero-cta-row">
-                <button class="btn" onclick="openRatingView()">🏆 Reytingni ko‘rish</button>
-                <button class="btn btn-ghost" onclick="openForumView()">💬 Fikr almashish</button>
-                <button class="btn btn-warn" id="apply-teacher-btn" onclick="openTeacherApplyModal()">
+                <button type="button" class="btn btn-purple" onclick="openWordGameView()">🔤 Ingliz tili o‘yini</button>
+                <button type="button" class="btn" onclick="openRatingView()">🏆 Reytingni ko‘rish</button>
+                <button type="button" class="btn btn-ghost" onclick="openForumView()">💬 Fikr almashish</button>
+                <button type="button" class="btn btn-warn" id="apply-teacher-btn" onclick="openTeacherApplyModal()">
                   👨‍🏫 Ustoz bo‘lish uchun so‘rov
                 </button>
               </div>
@@ -1165,15 +1451,15 @@
         <section id="view-lessons" class="view">
           <div class="top-bar">
             <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-              <button class="btn btn-ghost" onclick="goHome()">← Bosh sahifa</button>
+              <button type="button" class="btn btn-ghost" onclick="goHome()">← Bosh sahifa</button>
               <div>
                 <h2 id="sub-title" style="font-size: 1.65em;">Fan nomi</h2>
                 <p id="sub-subtitle" style="color: var(--text-dim); font-size: 0.9em;"></p>
               </div>
             </div>
             <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
-              <button class="btn btn-purple" id="add-math-ex-btn" style="display: none;" onclick="openAddMathExampleModal()">🧮 Matematikadan misol qo‘shish</button>
-              <button class="btn" id="add-lesson-btn" style="display: none;" onclick="openAddLessonModal()">+ Yangi dars qo‘shish</button>
+              <button type="button" class="btn btn-purple" id="add-math-ex-btn" style="display: none;" onclick="openAddMathExampleModal()">🧮 Matematikadan misol qo‘shish</button>
+              <button type="button" class="btn" id="add-lesson-btn" style="display: none;" onclick="openAddLessonModal()">+ Yangi dars qo‘shish</button>
               <input type="text" class="search-input" id="lesson-search" placeholder="Mavzu bo‘yicha qidirish..." oninput="filterLessons()" />
             </div>
           </div>
@@ -1183,19 +1469,19 @@
         <section id="view-study" class="view">
           <div class="top-bar">
             <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-              <button class="btn btn-ghost" onclick="backToSubject()">← Darslar ro‘yxati</button>
+              <button type="button" class="btn btn-ghost" onclick="backToSubject()">← Darslar ro‘yxati</button>
               <h2 id="lesson-heading" style="font-size: 1.4em;">Dars sarlavhasi</h2>
             </div>
             <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
-              <button class="btn btn-purple" id="study-add-math-btn" style="display: none;" onclick="openAddMathExampleModal()">+ Misol qo‘shish</button>
-              <button class="btn btn-danger" id="study-delete-lesson-btn" style="display: none;" onclick="deleteCurrentLesson()">🗑️ Ushbu darsni o‘chirish</button>
+              <button type="button" class="btn btn-purple" id="study-add-math-btn" style="display: none;" onclick="openAddMathExampleModal()">+ Misol qo‘shish</button>
+              <button type="button" class="btn btn-danger" id="study-delete-lesson-btn" style="display: none;" onclick="deleteCurrentLesson()">🗑️ Ushbu darsni o‘chirish</button>
             </div>
           </div>
 
           <div class="panel-box">
             <div class="tabs">
-              <button class="tab active" id="tab-btn-theory" onclick="setStudyTab('theory')">📖 Dars matni va Misollar</button>
-              <button class="tab" id="tab-btn-quiz" onclick="setStudyTab('quiz')">✍️ Test sinovi</button>
+              <button type="button" class="tab active" id="tab-btn-theory" onclick="setStudyTab('theory')">📖 Dars matni va Misollar</button>
+              <button type="button" class="tab" id="tab-btn-quiz" onclick="setStudyTab('quiz')">✍️ Test sinovi</button>
             </div>
 
             <div id="panel-theory" class="theory-content"></div>
@@ -1210,8 +1496,62 @@
               <div id="q-options"></div>
               <div id="q-feedback" style="margin: 0.85rem 0 0.4rem; font-weight: 700;"></div>
               <div id="q-explanation" class="explanation-box" style="display: none;"></div>
-              <button class="btn" id="q-next-btn" style="display: none;" onclick="nextQuizStep()">Keyingi savol →</button>
+              <button type="button" class="btn" id="q-next-btn" style="display: none;" onclick="nextQuizStep()">Keyingi savol →</button>
               <div id="quiz-certificate-area"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-wordgame" class="view">
+          <div class="top-bar">
+            <div>
+              <h2 style="font-size: 1.75em;">🔤 Ingliz tili — So‘z zanjiri o‘yini</h2>
+              <p style="color: var(--text-dim); font-size: 0.95em;">Ikki ishtirokchi navbatma-navbat inglizcha so‘z aytadi: har yangi so‘z oldingi so‘zning <strong>oxirgi harfi</strong> bilan boshlanishi shart!</p>
+            </div>
+            <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
+              <select id="wordgame-mode-select" class="modal-select" style="width: auto; margin: 0;" onchange="changeWordGameMode()">
+                <option value="2p">👥 2 ishtirokchi (Yonma-yon)</option>
+                <option value="bot">🤖 Sherik (Akademiya lug‘ati)</option>
+              </select>
+              <button type="button" class="btn btn-ghost" onclick="resetWordGame()">🔄 Qayta boshlash</button>
+              <button type="button" class="btn btn-ghost" onclick="goHome()">← Darslar</button>
+            </div>
+          </div>
+
+          <div class="panel-box">
+            <div class="word-game-banner">
+              <div>
+                <div style="font-size: 0.85em; color: var(--text-dim); font-weight: 700;">HOZIRGI NAVBAT</div>
+                <div id="wg-turn-label" style="font-size: 1.35em; font-weight: 800; margin-top: 0.2rem;">1-ishtirokchi</div>
+                <div id="wg-rule-hint" style="font-size: 0.9em; color: var(--text-dim); margin-top: 0.25rem;">Istalgan inglizcha so‘z kiriting (masalan: apple)</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 0.88em; color: var(--text-dim); font-weight: 700;">Boshlanish harfi:</span>
+                <div class="required-letter-badge" id="wg-req-letter">—</div>
+              </div>
+            </div>
+
+            <div class="score-cards-row">
+              <div class="player-score-card turn-active" id="wg-p1-card">
+                <div style="font-size: 0.85em; color: var(--text-dim);">1-ishtirokchi</div>
+                <div style="font-size: 1.5em; font-weight: 800; color: var(--primary);" id="wg-p1-score">0 ball</div>
+              </div>
+              <div class="player-score-card" id="wg-p2-card">
+                <div style="font-size: 0.85em; color: var(--text-dim);" id="wg-p2-title">2-ishtirokchi</div>
+                <div style="font-size: 1.5em; font-weight: 800; color: var(--secondary);" id="wg-p2-score">0 ball</div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
+              <input type="text" id="wg-word-input" class="modal-input" style="flex: 1; min-width: 200px; margin: 0;" placeholder="Inglizcha so‘z yozing (masalan: elephant)..." onkeydown="if(event.key==='Enter') submitWordGameWord()" />
+              <button type="button" class="btn" onclick="submitWordGameWord()">✓ So‘zni aytish</button>
+            </div>
+
+            <div id="wg-status-msg" style="margin-top: 0.85rem; font-weight: 700; min-height: 1.4rem;"></div>
+
+            <div style="margin-top: 1.25rem;">
+              <div style="font-size: 0.88em; font-weight: 700; color: var(--text-dim);">Aytilgan so‘zlar zanjiri:</div>
+              <div class="word-chain-list" id="wg-chain-list"></div>
             </div>
           </div>
         </section>
@@ -1222,7 +1562,7 @@
               <h2 style="font-size: 1.75em;">🏆 O‘quvchilar Reytingi</h2>
               <p style="color: var(--text-dim); font-size: 0.95em;">Faqat saytga kirgan foydalanuvchilar — o‘rgangan bilim foizi bo‘yicha saralangan.</p>
             </div>
-            <button class="btn btn-ghost" onclick="goHome()">← Darslarga qaytish</button>
+            <button type="button" class="btn btn-ghost" onclick="goHome()">← Darslarga qaytish</button>
           </div>
 
           <div class="panel-box">
@@ -1240,7 +1580,7 @@
               <h2 style="font-size: 1.75em;">💬 Fikr almashish va Savol-javob</h2>
               <p style="color: var(--text-dim); font-size: 0.95em;">Ona tili, Matematika va IT bo‘yicha savollaringizni yozing, boshqalarga yordam bering.</p>
             </div>
-            <button class="btn btn-ghost" onclick="goHome()">← Darslarga qaytish</button>
+            <button type="button" class="btn btn-ghost" onclick="goHome()">← Darslarga qaytish</button>
           </div>
 
           <div class="panel-box">
@@ -1254,7 +1594,7 @@
                   <option value="IT va Dasturlash">IT va Dasturlash</option>
                 </select>
                 <input type="text" id="forum-text" class="modal-input" style="flex: 1; margin: 0;" placeholder="Savolingiz yoki fikringizni yozing..." />
-                <button class="btn" onclick="publishForumPost()">Yuborish</button>
+                <button type="button" class="btn" onclick="publishForumPost()">Yuborish</button>
               </div>
             </div>
 
@@ -1265,13 +1605,23 @@
         <section id="view-admin" class="view">
           <div class="top-bar">
             <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-              <button class="btn btn-ghost" onclick="goHome()">← Bosh sahifa</button>
+              <button type="button" class="btn btn-ghost" onclick="goHome()">← Bosh sahifa</button>
               <div>
-                <h2 style="font-size: 1.65em;">🛡️ Admin Boshqaruv Paneli (Abdulhafiz)</h2>
-                <p style="color: var(--text-dim); font-size: 0.9em;">Ustozlik so‘rovlari, Google hisobda kirganlar va dars/misol boshqaruvi.</p>
+                <h2 style="font-size: 1.65em;">🛡️ Admin Boshqaruv Paneli</h2>
+                <p style="color: var(--text-dim); font-size: 0.9em;">Ustozlik so‘rovlari, telefon raqamlar, email xabarlar va kirgan foydalanuvchilar boshqaruvi.</p>
               </div>
             </div>
-            <button class="btn btn-purple" onclick="openAddMathExampleModal(true)">🧮 Matematikaga tezkor misol qo‘shish</button>
+            <button type="button" class="btn btn-purple" onclick="openAddMathExampleModal(true)">🧮 Matematikaga tezkor misol qo‘shish</button>
+          </div>
+
+          <div class="panel-box">
+            <h3 style="margin-bottom: 1rem; font-size: 1.25em;">📱 Telefon raqam bilan kirgan foydalanuvchilar</h3>
+            <div id="phone-users-list"></div>
+          </div>
+
+          <div class="panel-box">
+            <h3 style="margin-bottom: 1rem; font-size: 1.25em;">📧 Yuborilgan email xabarlar va tasdiqlash kodlari</h3>
+            <div id="email-messages-list"></div>
           </div>
 
           <div class="panel-box">
@@ -1285,7 +1635,7 @@
           </div>
 
           <div class="panel-box" id="admin-only-google-users-box">
-            <h3 style="margin-bottom: 1rem; font-size: 1.25em;">🔐 Google hisobda kirgan foydalanuvchilar (Faqat Admin uchun)</h3>
+            <h3 style="margin-bottom: 1rem; font-size: 1.25em;">🔐 Kirgan foydalanuvchilar tarixi (Faqat Admin uchun)</h3>
             <div id="google-users-list"></div>
           </div>
         </section>
@@ -1301,7 +1651,7 @@
     <div class="modal-box">
       <h3 style="font-size: 1.35em; margin-bottom: 0.4rem;">👨‍🏫 Ustoz bo‘lish uchun so‘rov</h3>
       <p style="color: var(--text-dim); font-size: 0.9em; margin-bottom: 1rem;">
-        So‘rovingiz Admin (<strong>abdulhafiz@gmail.com</strong>) ga yuboriladi. Tasdiqlansa, sizga dars va misol qo‘shish huquqi beriladi.
+        So‘rovingiz Adminga yuboriladi. Tasdiqlansa, sizga dars va misol qo‘shish huquqi beriladi.
       </p>
       <label style="font-size: 0.85em; color: var(--text-dim);">Qaysi yo‘nalishda ustoz bo‘lmoqchisiz?</label>
       <select id="apply-subject" class="modal-select">
@@ -1312,8 +1662,8 @@
       <label style="font-size: 0.85em; color: var(--text-dim);">Tajribangiz va qisqacha izoh</label>
       <textarea id="apply-note" class="modal-textarea" rows="3" placeholder="Masalan: Matematika fanidan 2 yillik tajribam bor..."></textarea>
       <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem;">
-        <button class="btn btn-ghost" onclick="closeModal('teacher-apply-modal')">Bekor qilish</button>
-        <button class="btn btn-warn" onclick="submitTeacherRequest()">So‘rov yuborish</button>
+        <button type="button" class="btn btn-ghost" onclick="closeModal('teacher-apply-modal')">Bekor qilish</button>
+        <button type="button" class="btn btn-warn" onclick="submitTeacherRequest()">So‘rov yuborish</button>
       </div>
     </div>
   </div>
@@ -1329,17 +1679,17 @@
         <option value="math">Matematika</option>
         <option value="it">IT va Dasturlash</option>
       </select>
-      <input type="text" id="new-lesson-title" class="modal-input" placeholder="Dars mavzusi (masalan: Kvadrat tenglamalar)" />
+      <input type="text" id="new-lesson-title" class="modal-input" placeholder="Dars mavzusi" />
       <textarea id="new-lesson-theory" class="modal-textarea" rows="3" placeholder="Dars nazariyasi va tushuntirish..."></textarea>
       <input type="text" id="new-lesson-example" class="modal-input" placeholder="Misol yoki kod namunasi (ixtiyoriy)" />
       <input type="text" id="new-lesson-q" class="modal-input" placeholder="Test savoli" />
       <input type="text" id="new-lesson-opt0" class="modal-input" placeholder="1-variant (to‘g‘ri javob)" />
       <input type="text" id="new-lesson-opt1" class="modal-input" placeholder="2-variant" />
       <input type="text" id="new-lesson-opt2" class="modal-input" placeholder="3-variant" />
-      <input type="text" id="new-lesson-exp" class="modal-input" placeholder="Test javobiga batafsil izoh (nima uchun to‘g‘ri?)" />
+      <input type="text" id="new-lesson-exp" class="modal-input" placeholder="Test javobiga batafsil izoh" />
       <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem;">
-        <button class="btn btn-ghost" onclick="closeModal('add-lesson-modal')">Bekor qilish</button>
-        <button class="btn" onclick="saveNewLesson()">Saqlash</button>
+        <button type="button" class="btn btn-ghost" onclick="closeModal('add-lesson-modal')">Bekor qilish</button>
+        <button type="button" class="btn" onclick="saveNewLesson()">Saqlash</button>
       </div>
     </div>
   </div>
@@ -1351,11 +1701,11 @@
         Misol va uning yechimi/javobi dars sahifasida o‘quvchilarga ko‘rinadi.
       </p>
       <select id="math-ex-lesson-select" class="modal-select"></select>
-      <textarea id="math-ex-problem" class="modal-textarea" rows="3" placeholder="Misol sharti (masalan: 2x + 14 = 30 tenglamani yeching)"></textarea>
-      <input type="text" id="math-ex-solution" class="modal-input" placeholder="Yechim va javob (masalan: x = 8)" />
+      <textarea id="math-ex-problem" class="modal-textarea" rows="3" placeholder="Misol sharti"></textarea>
+      <input type="text" id="math-ex-solution" class="modal-input" placeholder="Yechim va javob" />
       <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem;">
-        <button class="btn btn-ghost" onclick="closeModal('add-math-modal')">Bekor qilish</button>
-        <button class="btn btn-purple" onclick="saveMathExample()">Misolni qo‘shish</button>
+        <button type="button" class="btn btn-ghost" onclick="closeModal('add-math-modal')">Bekor qilish</button>
+        <button type="button" class="btn btn-purple" onclick="saveMathExample()">Misolni qo‘shish</button>
       </div>
     </div>
   </div>
@@ -1363,7 +1713,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const ADMIN_EMAIL = "mustafavsabdulhafiz2011@gmai";
+    const ADMIN_EMAIL = "mustafavsabdulhafiz2011@gmail.com";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAR1KYdB-CGULi8I9ziGeQtmZMYyuXeIQM",
@@ -1377,6 +1727,7 @@
     };
 
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const db = firebase.database();
 
     const DEFAULT_SUBJECTS = {
@@ -1405,300 +1756,55 @@
 
     const DEFAULT_LESSONS = {
       uzbek: [
-        {
-          id: "uz-1",
-          title: "Unli va undosh tovushlar tasnifi",
-          theory: "<h3>Unli va undosh tovushlar</h3><p>O‘zbek adabiy tilida 6 ta unli tovush (a, o, i, e, u, o‘) va 24 ta undosh tovush mavjud. Undoshlar ovoz va shovqinning ishtirokiga ko‘ra jarangli hamda jarangsiz turlarga bo‘linadi.</p>",
-          example: "Jarangli: b, d, g, z, j, l, m, n, r, v, y\nJarangsiz: p, t, k, s, sh, ch, f, x, q, h",
-          quiz: [{
-            q: "O‘zbek tilida nechta unli tovush bor?",
-            opts: ["6 ta", "5 ta", "8 ta"],
-            ans: 0,
-            exp: "Hozirgi o‘zbek adabiy tilida 6 ta unli tovush mavjud: a, o, i, e, u, o‘."
-          }]
-        },
-        {
-          id: "uz-2",
-          title: "Ot so‘z turkumi va kelishik qo‘shimchalari",
-          theory: "<h3>Ot va kelishiklar</h3><p>Predmetning nomini bildirib, <em>kim? nima? qayer?</em> so‘roqlariga javob beradigan so‘zlar ot turkumiga kiradi. O‘zbek tilida 6 ta kelishik mavjud.</p>",
-          example: "Bosh: kitob | Qaratqich: kitobning | Tushum: kitobni | Jo‘nalish: kitobga",
-          quiz: [{
-            q: "«Kitobni o‘qidim» gapida «kitobni» qaysi kelishikda?",
-            opts: ["Tushum kelishigi", "Qaratqich kelishigi", "Jo‘nalish kelishigi"],
-            ans: 0,
-            exp: "-ni qo‘shimchasi o‘timli fe’l bilan bog‘langan vositasiz to‘ldiruvchini shakllantiradi — bu tushum kelishigidir."
-          }]
-        },
-        {
-          id: "uz-3",
-          title: "Gap bo‘laklari va ega-kesim mosligi",
-          theory: "<h3>Gap bo‘laklari</h3><p>Gapning grammatik asosini <strong>ega</strong> va <strong>kesim</strong> tashkil etadi. Ikkinchi darajali bo‘laklar gap mazmunini kengaytiradi.</p>",
-          example: "Ega: O‘quvchi (kim?) | Kesim: tayyorlandi (nima qildi?)",
-          quiz: [{
-            q: "Gapning grammatik asosini nima tashkil etadi?",
-            opts: ["Ega va kesim", "Aniqlovchi va hol", "To‘ldiruvchi va kirish so‘z"],
-            ans: 0,
-            exp: "Gapning asosiy tayanchi ega va kesim hisoblanadi."
-          }]
-        },
-        {
-          id: "uz-4",
-          title: "Sifat va ravish so‘z turkumlari",
-          theory: "<h3>Sifat va ravish</h3><p>Sifat predmetning belgisini (<em>qanday? qanaqa?</em>), ravish esa harakat yoki holatning belgisini bildiradi.</p>",
-          example: "Sifat: tiniq osmon | Ravish: tez yugurdi",
-          quiz: [{
-            q: "«Tez yugurdi» birikmasida «tez» so‘zi qaysi so‘z turkumiga kiradi?",
-            opts: ["Ravish", "Sifat", "Ot"],
-            ans: 0,
-            exp: "«Tez» harakatning bajarilish tarzini («qanday yugurdi?») bildirgani uchun ravishdir."
-          }]
-        },
-        {
-          id: "uz-5",
-          title: "Fe’l mayllari va zamonlari",
-          theory: "<h3>Fe’l zamonlari</h3><p>Fe’l harakatning nutq momentiga nisbatan bajarilish vaqtini <strong>o‘tgan</strong>, <strong>hozirgi</strong> va <strong>kelasi zamon</strong> shakllarida ifodalaydi.</p>",
-          example: "O‘tgan: yozdi | Hozirgi: yozyapti | Kelasi: yozadi",
-          quiz: [{
-            q: "«Kitob o‘qiyapti» fe’li qaysi zamonda?",
-            opts: ["Hozirgi zamon", "O‘tgan zamon", "Kelasi zamon"],
-            ans: 0,
-            exp: "-yap qo‘shimchasi harakatning hozir, ayni paytda davom etayotganini bildiradi."
-          }]
-        },
-        {
-          id: "uz-6",
-          title: "Imlo qoidalari: tutuq belgisi va qo‘shma so‘zlar",
-          theory: "<h3>Imlo qoidalari</h3><p>Tutuq belgisi (’) ayrim undoshlardan keyin unlidan ajratib talaffuz qilish yoki unlining cho‘ziqligini ko‘rsatish uchun qo‘llanadi.</p>",
-          example: "ma’no, e’lon, she’r, a’lo",
-          quiz: [{
-            q: "Qaysi so‘z tutuq belgisi bilan to‘g‘ri yozilgan?",
-            opts: ["ma’no", "man’o", "ma’n’o"],
-            ans: 0,
-            exp: "«Ma’no» so‘zida tutuq belgisi a harfidan keyin qo‘yiladi."
-          }]
-        },
-        {
-          id: "uz-7",
-          title: "Tinish belgilari: vergul, nuqta va tire",
-          theory: "<h3>Tinish belgilari</h3><p>Uyushiq bo‘laklar orasida vergul, gap oxirida nuqta yoki undov/so‘roq belgisi qo‘yiladi.</p>",
-          example: "Olma, anor, uzum va shaftoli pishdi.",
-          quiz: [{
-            q: "Uyushiq bo‘laklar orasida qaysi tinish belgisi qo‘yiladi?",
-            opts: ["Vergul (,)", "Nuqtali vergul (;)", "Qavs ()"],
-            ans: 0,
-            exp: "Bir xil so‘roqqa javob beruvchi uyushiq bo‘laklar orasiga vergul qo‘yiladi."
-          }]
-        },
-        {
-          id: "uz-8",
-          title: "Nutq uslublari: badiiy, ilmiy va so‘zlashuv",
-          theory: "<h3>Nutq uslublari</h3><p>Ilmiy uslubda aniqlik va atamalar, badiiy uslubda obrazlilik, so‘zlashuv uslubida esa kundalik jonli muloqot ustunlik qiladi.</p>",
-          example: "Ilmiy: Kvadrat tenglama ildizlari.\nBadiiy: Tong nafasi gul yaproqlarini o‘pdi.",
-          quiz: [{
-            q: "Qaysi uslubda atamalar va aniq ta’riflar ko‘p ishlatiladi?",
-            opts: ["Ilmiy uslub", "So‘zlashuv uslubi", "Badiiy uslub"],
-            ans: 0,
-            exp: "Ilmiy uslub fan va texnikaga oid aniq tushuncha hamda qoidalarni bayon etadi."
-          }]
-        }
+        { id: "uz-1", title: "Unli va undosh tovushlar tasnifi", theory: "<h3>Unli va undosh tovushlar</h3><p>O‘zbek adabiy tilida 6 ta unli tovush (a, o, i, e, u, o‘) va 24 ta undosh tovush mavjud. Undoshlar ovoz va shovqinning ishtirokiga ko‘ra jarangli hamda jarangsiz turlarga bo‘linadi.</p>", example: "Jarangli: b, d, g, z, j, l, m, n, r, v, y\nJarangsiz: p, t, k, s, sh, ch, f, x, q, h", quiz: [{ q: "O‘zbek tilida nechta unli tovush bor?", opts: ["6 ta", "5 ta", "8 ta"], ans: 0, exp: "Hozirgi o‘zbek adabiy tilida 6 ta unli tovush mavjud: a, o, i, e, u, o‘." }] },
+        { id: "uz-2", title: "Ot so‘z turkumi va kelishik qo‘shimchalari", theory: "<h3>Ot va kelishiklar</h3><p>Predmetning nomini bildirib, <em>kim? nima? qayer?</em> so‘roqlariga javob beradigan so‘zlar ot turkumiga kiradi. O‘zbek tilida 6 ta kelishik mavjud.</p>", example: "Bosh: kitob | Qaratqich: kitobning | Tushum: kitobni | Jo‘nalish: kitobga", quiz: [{ q: "«Kitobni o‘qidim» gapida «kitobni» qaysi kelishikda?", opts: ["Tushum kelishigi", "Qaratqich kelishigi", "Jo‘nalish kelishigi"], ans: 0, exp: "-ni qo‘shimchasi o‘timli fe’l bilan bog‘langan vositasiz to‘ldiruvchini shakllantiradi — bu tushum kelishigidir." }] },
+        { id: "uz-3", title: "Gap bo‘laklari va ega-kesim mosligi", theory: "<h3>Gap bo‘laklari</h3><p>Gapning grammatik asosini <strong>ega</strong> va <strong>kesim</strong> tashkil etadi. Ikkinchi darajali bo‘laklar gap mazmunini kengaytiradi.</p>", example: "Ega: O‘quvchi (kim?) | Kesim: tayyorlandi (nima qildi?)", quiz: [{ q: "Gapning grammatik asosini nima tashkil etadi?", opts: ["Ega va kesim", "Aniqlovchi va hol", "To‘ldiruvchi va kirish so‘z"], ans: 0, exp: "Gapning asosiy tayanchi ega va kesim hisoblanadi." }] },
+        { id: "uz-4", title: "Sifat va ravish so‘z turkumlari", theory: "<h3>Sifat va ravish</h3><p>Sifat predmetning belgisini (<em>qanday? qanaqa?</em>), ravish esa harakat yoki holatning belgisini bildiradi.</p>", example: "Sifat: tiniq osmon | Ravish: tez yugurdi", quiz: [{ q: "«Tez yugurdi» birikmasida «tez» so‘zi qaysi so‘z turkumiga kiradi?", opts: ["Ravish", "Sifat", "Ot"], ans: 0, exp: "«Tez» harakatning bajarilish tarzini («qanday yugurdi?») bildirgani uchun ravishdir." }] },
+        { id: "uz-5", title: "Fe’l mayllari va zamonlari", theory: "<h3>Fe’l zamonlari</h3><p>Fe’l harakatning nutq momentiga nisbatan bajarilish vaqtini <strong>o‘tgan</strong>, <strong>hozirgi</strong> va <strong>kelasi zamon</strong> shakllarida ifodalaydi.</p>", example: "O‘tgan: yozdi | Hozirgi: yozyapti | Kelasi: yozadi", quiz: [{ q: "«Kitob o‘qiyapti» fe’li qaysi zamonda?", opts: ["Hozirgi zamon", "O‘tgan zamon", "Kelasi zamon"], ans: 0, exp: "-yap qo‘shimchasi harakatning hozir, ayni paytda davom etayotganini bildiradi." }] },
+        { id: "uz-6", title: "Imlo qoidalari: tutuq belgisi va qo‘shma so‘zlar", theory: "<h3>Imlo qoidalari</h3><p>Tutuq belgisi (’) ayrim undoshlardan keyin unlidan ajratib talaffuz qilish yoki unlining cho‘ziqligini ko‘rsatish uchun qo‘llanadi.</p>", example: "ma’no, e’lon, she’r, a’lo", quiz: [{ q: "Qaysi so‘z tutuq belgisi bilan to‘g‘ri yozilgan?", opts: ["ma’no", "man’o", "ma’n’o"], ans: 0, exp: "«Ma’no» so‘zida tutuq belgisi a harfidan keyin qo‘yiladi." }] },
+        { id: "uz-7", title: "Tinish belgilari: vergul, nuqta va tire", theory: "<h3>Tinish belgilari</h3><p>Uyushiq bo‘laklar orasida vergul, gap oxirida nuqta yoki undov/so‘roq belgisi qo‘yiladi.</p>", example: "Olma, anor, uzum va shaftoli pishdi.", quiz: [{ q: "Uyushiq bo‘laklar orasida qaysi tinish belgisi qo‘yiladi?", opts: ["Vergul (,)", "Nuqtali vergul (;)", "Qavs ()"], ans: 0, exp: "Bir xil so‘roqqa javob beruvchi uyushiq bo‘laklar orasiga vergul qo‘yiladi." }] },
+        { id: "uz-8", title: "Nutq uslublari: badiiy, ilmiy va so‘zlashuv", theory: "<h3>Nutq uslublari</h3><p>Ilmiy uslubda aniqlik va atamalar, badiiy uslubda obrazlilik, so‘zlashuv uslubida esa kundalik jonli muloqot ustunlik qiladi.</p>", example: "Ilmiy: Kvadrat tenglama ildizlari.\nBadiiy: Tong nafasi gul yaproqlarini o‘pdi.", quiz: [{ q: "Qaysi uslubda atamalar va aniq ta’riflar ko‘p ishlatiladi?", opts: ["Ilmiy uslub", "So‘zlashuv uslubi", "Badiiy uslub"], ans: 0, exp: "Ilmiy uslub fan va texnikaga oid aniq tushuncha hamda qoidalarni bayon etadi." }] },
+        { id: "uz-9", title: "Olmosh turlari va ularning vazifasi", theory: "<h3>Olmoshlar</h3><p>Olmosh ot, sifat, son o‘rnida qo‘llanuvchi so‘z turkumidir: kishilik, ko‘rsatish, o‘zlik, so‘roq, belgilash va bo‘lishsiz olmoshlar mavjud.</p>", example: "men, sen, u, shu, o‘sha, kim, hamma, hech kim", quiz: [{ q: "«O‘sha kitob» birikmasida «o‘sha» qaysi olmosh turiga kiradi?", opts: ["Ko‘rsatish olmoshi", "Kishilik olmoshi", "So‘roq olmoshi"], ans: 0, exp: "«O‘sha» predmetni ko‘rsatib kelgani uchun ko‘rsatish olmoshidir." }] },
+        { id: "uz-10", title: "Son so‘z turkumi va uning ma’no turlari", theory: "<h3>Son so‘z turkumi</h3><p>Predmetning sanog‘ini yoki tartibini bildiruvchi so‘zlar son turkumiga kiradi: sanoq son va tartib son.</p>", example: "Sanoq: besh, o‘n | Tartib: beshinchi, o‘ninchi", quiz: [{ q: "Qaysi so‘z tartib son hisoblanadi?", opts: ["uchinchi", "uchta", "uchov"], ans: 0, exp: "-inchi qo‘shimchasi predmetning tartibini bildiradi." }] },
+        { id: "uz-11", title: "Yordamchi so‘zlar: ko‘makchi, bog‘lovchi, yuklama", theory: "<h3>Yordamchi so‘zlar</h3><p>Yordamchi so‘zlar mustaqil ma’no bildirmaydi, balki so‘zlar yoki gaplar orasida grammatik munosabat va qo‘shimcha ma’no hosil qiladi.</p>", example: "Ko‘makchi: uchun, bilan | Bog‘lovchi: va, lekin | Yuklama: -mi, -gina", quiz: [{ q: "«-mi» qaysi yordamchi so‘z turkumiga kiradi?", opts: ["Yuklama", "Ko‘makchi", "Bog‘lovchi"], ans: 0, exp: "-mi so‘roq ma’nosini ifodalovchi so‘roq yuklamasidir." }] },
+        { id: "uz-12", title: "Matn tuzilishi, reja va xulosa yozish", theory: "<h3>Matn va reja</h3><p>Yaxlit matn kirish, asosiy qism va xulosadan iborat bo‘ladi. Reja tuzish fikrni tartibli va mantiqiy bayon etishga yordam beradi.</p>", example: "1. Kirish\n2. Asosiy fikr va dalillar\n3. Xulosa", quiz: [{ q: "Matnning asosiy qismlari qaysilar?", opts: ["Kirish, asosiy qism, xulosa", "Sarlavha, muallif, manba", "Savol, javob, izoh"], ans: 0, exp: "Har qanday izchil matn kirish, asosiy qism va xulosa qismlaridan tashkil topadi." }] }
       ],
       math: [
-        {
-          id: "m-1",
-          title: "Chiziqli tenglamalar va ifodalar",
-          theory: "<h3>Chiziqli tenglamalar</h3><p>Noma’lum o‘zgaruvchisi birinchi darajada bo‘lgan tenglamalar chiziqli tenglama deyiladi.</p>",
-          example: "3x - 7 = 14  =>  3x = 21  =>  x = 7",
-          quiz: [{
-            q: "3x - 7 = 14 tenglamaning ildizini toping:",
-            opts: ["7", "5", "21"],
-            ans: 0,
-            exp: "3x = 21 bo‘ladi, ikkala tomonni 3 ga bo‘lsak x = 7 chiqadi."
-          }]
-        },
-        {
-          id: "m-2",
-          title: "Foizlar va nisbatlar",
-          theory: "<h3>Foiz tushunchasi</h3><p>Sonning yuzdan bir ulushi foiz (%) deb ataladi. Sonning p% ini topish uchun uni p ga ko‘paytirib, 100 ga bo‘lamiz.</p>",
-          example: "200 ning 25% i = 200 × 25 / 100 = 50",
-          quiz: [{
-            q: "200 sonining 25% i nechaga teng?",
-            opts: ["50", "25", "75"],
-            ans: 0,
-            exp: "200 × 25 / 100 = 50."
-          }]
-        },
-        {
-          id: "m-3",
-          title: "Geometrik shakllar yuzi va perimetri",
-          theory: "<h3>Kvadrat va to‘g‘ri to‘rtburchak</h3><p>Tomoni <em>a</em> bo‘lgan kvadratning yuzi S = a², perimetri esa P = 4a formulasi bilan hisoblanadi.</p>",
-          example: "a = 6 sm bo‘lsa: S = 36 sm², P = 24 sm",
-          quiz: [{
-            q: "Tomoni 6 sm bo‘lgan kvadratning yuzi nechaga teng?",
-            opts: ["36 sm²", "24 sm²", "12 sm²"],
-            ans: 0,
-            exp: "6 × 6 = 36 sm²."
-          }]
-        },
-        {
-          id: "m-4",
-          title: "Kvadrat ildiz va darajalar",
-          theory: "<h3>Daraja va kvadrat ildiz</h3><p>Sonning n-darajasi o‘sha sonni o‘ziga n marta ko‘paytirishdir. Masalan, 5² = 25 va √25 = 5.</p>",
-          example: "2⁴ = 16 | √81 = 9",
-          quiz: [{
-            q: "√81 ning qiymati nechaga teng?",
-            opts: ["9", "8", "7"],
-            ans: 0,
-            exp: "9² = 81 bo‘lgani uchun √81 = 9."
-          }]
-        },
-        {
-          id: "m-5",
-          title: "Oddiy va o‘nli kasrlar bilan amallar",
-          theory: "<h3>Kasrlar</h3><p>Kasrlarni qo‘shish va ayirishda avval umumiy maxrajga keltiriladi yoki o‘nli ko‘rinishga o‘tkaziladi.</p>",
-          example: "0.5 + 0.25 = 0.75 | 1/2 + 1/4 = 3/4",
-          quiz: [{
-            q: "1/2 va 1/4 kasrlar yig‘indisi nechaga teng?",
-            opts: ["3/4", "2/6", "1/6"],
-            ans: 0,
-            exp: "2/4 + 1/4 = 3/4."
-          }]
-        },
-        {
-          id: "m-6",
-          title: "Kvadrat tenglamalar va diskriminant",
-          theory: "<h3>Kvadrat tenglama</h3><p>ax² + bx + c = 0 ko‘rinishdagi tenglamada diskriminant D = b² - 4ac orqali ildizlar soni aniqlanadi.</p>",
-          example: "x² - 5x + 6 = 0  =>  x₁ = 2, x₂ = 3",
-          quiz: [{
-            q: "x² - 5x + 6 = 0 tenglamaning ildizlari qaysilar?",
-            opts: ["2 va 3", "1 va 6", "-2 va -3"],
-            ans: 0,
-            exp: "2 + 3 = 5 va 2 × 3 = 6 shartlari bajariladi."
-          }]
-        },
-        {
-          id: "m-7",
-          title: "Uchburchak va aylana asoslari",
-          theory: "<h3>Uchburchak burchaklari</h3><p>Har qanday tekis uchburchak ichki burchaklari yig‘indisi 180° ga teng.</p>",
-          example: "Agar ikki burchak 60° va 70° bo‘lsa, uchinchisi 180° - 130° = 50°.",
-          quiz: [{
-            q: "Uchburchak ichki burchaklari yig‘indisi nechaga teng?",
-            opts: ["180°", "90°", "360°"],
-            ans: 0,
-            exp: "Tekis uchburchak ichki burchaklari yig‘indisi doimo 180° bo‘ladi."
-          }]
-        },
-        {
-          id: "m-8",
-          title: "O‘rtacha arifmetik va ehtimollik",
-          theory: "<h3>O‘rtacha arifmetik</h3><p>Sonlarning o‘rtacha arifmetik qiymati ularning yig‘indisini sonlar miqdoriga bo‘lish orqali topiladi.</p>",
-          example: "(4 + 6 + 8) / 3 = 18 / 3 = 6",
-          quiz: [{
-            q: "4, 6 va 8 sonlarining o‘rtacha arifmetigi nechaga teng?",
-            opts: ["6", "5", "7"],
-            ans: 0,
-            exp: "(4 + 6 + 8) / 3 = 6."
-          }]
-        }
+        { id: "m-1", title: "Chiziqli tenglamalar va ifodalar", theory: "<h3>Chiziqli tenglamalar</h3><p>Noma’lum o‘zgaruvchisi birinchi darajada bo‘lgan tenglamalar chiziqli tenglama deyiladi.</p>", example: "3x - 7 = 14  =>  3x = 21  =>  x = 7", quiz: [{ q: "3x - 7 = 14 tenglamaning ildizini toping:", opts: ["7", "5", "21"], ans: 0, exp: "3x = 21 bo‘ladi, ikkala tomonni 3 ga bo‘lsak x = 7 chiqadi." }] },
+        { id: "m-2", title: "Foizlar va nisbatlar", theory: "<h3>Foiz tushunchasi</h3><p>Sonning yuzdan bir ulushi foiz (%) deb ataladi. Sonning p% ini topish uchun uni p ga ko‘paytirib, 100 ga bo‘lamiz.</p>", example: "200 ning 25% i = 200 × 25 / 100 = 50", quiz: [{ q: "200 sonining 25% i nechaga teng?", opts: ["50", "25", "75"], ans: 0, exp: "200 × 25 / 100 = 50." }] },
+        { id: "m-3", title: "Geometrik shakllar yuzi va perimetri", theory: "<h3>Kvadrat va to‘g‘ri to‘rtburchak</h3><p>Tomoni <em>a</em> bo‘lgan kvadratning yuzi S = a², perimetri esa P = 4a formulasi bilan hisoblanadi.</p>", example: "a = 6 sm bo‘lsa: S = 36 sm², P = 24 sm", quiz: [{ q: "Tomoni 6 sm bo‘lgan kvadratning yuzi nechaga teng?", opts: ["36 sm²", "24 sm²", "12 sm²"], ans: 0, exp: "6 × 6 = 36 sm²." }] },
+        { id: "m-4", title: "Kvadrat ildiz va darajalar", theory: "<h3>Daraja va kvadrat ildiz</h3><p>Sonning n-darajasi o‘sha sonni o‘ziga n marta ko‘paytirishdir. Masalan, 5² = 25 va √25 = 5.</p>", example: "2⁴ = 16 | √81 = 9", quiz: [{ q: "√81 ning qiymati nechaga teng?", opts: ["9", "8", "7"], ans: 0, exp: "9² = 81 bo‘lgani uchun √81 = 9." }] },
+        { id: "m-5", title: "Oddiy va o‘nli kasrlar bilan amallar", theory: "<h3>Kasrlar</h3><p>Kasrlarni qo‘shish va ayirishda avval umumiy maxrajga keltiriladi yoki o‘nli ko‘rinishga o‘tkaziladi.</p>", example: "0.5 + 0.25 = 0.75 | 1/2 + 1/4 = 3/4", quiz: [{ q: "1/2 va 1/4 kasrlar yig‘indisi nechaga teng?", opts: ["3/4", "2/6", "1/6"], ans: 0, exp: "2/4 + 1/4 = 3/4." }] },
+        { id: "m-6", title: "Kvadrat tenglamalar va diskriminant", theory: "<h3>Kvadrat tenglama</h3><p>ax² + bx + c = 0 ko‘rinishdagi tenglamada diskriminant D = b² - 4ac orqali ildizlar soni aniqlanadi.</p>", example: "x² - 5x + 6 = 0  =>  x₁ = 2, x₂ = 3", quiz: [{ q: "x² - 5x + 6 = 0 tenglamaning ildizlari qaysilar?", opts: ["2 va 3", "1 va 6", "-2 va -3"], ans: 0, exp: "2 + 3 = 5 va 2 × 3 = 6 shartlari bajariladi." }] },
+        { id: "m-7", title: "Uchburchak va aylana asoslari", theory: "<h3>Uchburchak burchaklari</h3><p>Har qanday tekis uchburchak ichki burchaklari yig‘indisi 180° ga teng.</p>", example: "Agar ikki burchak 60° va 70° bo‘lsa, uchinchisi 180° - 130° = 50°.", quiz: [{ q: "Uchburchak ichki burchaklari yig‘indisi nechaga teng?", opts: ["180°", "90°", "360°"], ans: 0, exp: "Tekis uchburchak ichki burchaklari yig‘indisi doimo 180° bo‘ladi." }] },
+        { id: "m-8", title: "O‘rtacha arifmetik va ehtimollik", theory: "<h3>O‘rtacha arifmetik</h3><p>Sonlarning o‘rtacha arifmetik qiymati ularning yig‘indisini sonlar miqdoriga bo‘lish orqali topiladi.</p>", example: "(4 + 6 + 8) / 3 = 18 / 3 = 6", quiz: [{ q: "4, 6 va 8 sonlarining o‘rtacha arifmetigi nechaga teng?", opts: ["6", "5", "7"], ans: 0, exp: "(4 + 6 + 8) / 3 = 6." }] },
+        { id: "m-9", title: "Butun sonlar, modul va son o‘qi", theory: "<h3>Sonning moduli</h3><p>Sonning moduli son o‘qida undan 0 gacha bo‘lgan masofadir. Modul hech qachon manfiy bo‘lmaydi.</p>", example: "|-12| = 12 | |7| = 7", quiz: [{ q: "|-15| + |5| ifodaning qiymatini toping:", opts: ["20", "10", "-10"], ans: 0, exp: "15 + 5 = 20." }] },
+        { id: "m-10", title: "Tengsizliklar va sonli oraliqlar", theory: "<h3>Chiziqli tengsizliklar</h3><p>Tengsizlikning ikkala tomonini musbat songa bo‘lganda ishora o‘zgarmaydi.</p>", example: "2x > 10  =>  x > 5", quiz: [{ q: "2x > 10 tengsizlik qaysi qiymatda bajariladi?", opts: ["x > 5", "x < 5", "x = 5"], ans: 0, exp: "10 ni 2 ga bo‘lsak 5 chiqadi, demak x > 5." }] },
+        { id: "m-11", title: "Progressiyalar va ketma-ketliklar", theory: "<h3>Arifmetik progressiya</h3><p>Har bir keyingi hadi avvalgisiga o‘zgarmas <em>d</em> sonni qo‘shish orqali hosil bo‘ladigan ketma-ketlik arifmetik progressiya deyiladi.</p>", example: "2, 5, 8, 11, ... (ayirmasi d = 3)", quiz: [{ q: "2, 5, 8, 11 ketma-ketligining keyingi hadi nechaga teng?", opts: ["14", "13", "15"], ans: 0, exp: "Har safar 3 qo‘shilmoqda: 11 + 3 = 14." }] },
+        { id: "m-12", title: "Tezlik, vaqt va masofa masalalari", theory: "<h3>Harakat formulasi</h3><p>Bosib o‘tilgan masofa S = v × t formula bilan topiladi (v — tezlik, t — vaqt).</p>", example: "v = 60 km/soat, t = 2 soat  =>  S = 120 km", quiz: [{ q: "60 km/soat tezlik bilan 2 soatda qancha masofa bosib o‘tiladi?", opts: ["120 km", "30 km", "90 km"], ans: 0, exp: "S = 60 × 2 = 120 km." }] }
       ],
       it: [
-        {
-          id: "it-1",
-          title: "HTML asoslari va semantik teglar",
-          theory: "<h3>HTML tuzilishi</h3><p>HTML veb-sahifaning tuzilishini belgilaydi. Sarlavha, matn, ro‘yxat va havolalar teglar yordamida yaratiladi.</p>",
-          example: "<h1>Abdulhafiz Akademiyasi</h1>\n<p>Dasturlashni o‘rganamiz</p>",
-          quiz: [{
-            q: "Veb-sahifaning asosiy tuzilishini qaysi til yaratadi?",
-            opts: ["HTML", "CSS", "SQL"],
-            ans: 0,
-            exp: "HTML sahifa skeletini yaratadi, CSS dizayn beradi."
-          }]
-        },
-        {
-          id: "it-2",
-          title: "JavaScript o‘zgaruvchilari va funksiyalar",
-          theory: "<h3>JavaScript asoslari</h3><p>JavaScript sahifaga interaktivlik qo‘shadi. O‘zgaruvchilar <code>let</code> va <code>const</code> bilan e’lon qilinadi.</p>",
-          example: "const ball = 95;\nfunction natija(b) { return b >= 60 ? 'O‘tdi' : 'Qayta urining'; }",
-          quiz: [{
-            q: "JavaScript da o‘zgarmas qiymat qaysi kalit so‘z bilan e’lon qilinadi?",
-            opts: ["const", "var", "static"],
-            ans: 0,
-            exp: "const o‘zgarmas qiymat e’lon qilish uchun ishlatiladi."
-          }]
-        },
-        {
-          id: "it-3",
-          title: "Algoritmlar va shart operatorlari",
-          theory: "<h3>Shart operatorlari</h3><p>Dasturda qaror qabul qilish uchun <code>if / else</code> shart operatorlari ishlatiladi.</p>",
-          example: "if (x > 0) {\n  console.log('Musbat son');\n}",
-          quiz: [{
-            q: "Dasturda shart tekshirish uchun qaysi operator ishlatiladi?",
-            opts: ["if / else", "break", "import"],
-            ans: 0,
-            exp: "if / else shart rost yoki yolg‘onligiga qarab tarmoqlanadi."
-          }]
-        },
-        {
-          id: "it-4",
-          title: "CSS Flexbox va moslashuvchan dizayn",
-          theory: "<h3>CSS Flexbox</h3><p><code>display: flex</code> elementlarni bir qatorda yoki ustunda qulay joylashtirish va ekranlarga moslashtirish uchun ishlatiladi.</p>",
-          example: ".container {\n  display: flex;\n  justify-content: space-between;\n}",
-          quiz: [{
-            q: "Elementlarni moslashuvchan joylashtirish uchun qaysi CSS xususiyat ishlatiladi?",
-            opts: ["display: flex", "text-align: justify", "font-weight: bold"],
-            ans: 0,
-            exp: "display: flex moslashuvchan konteyner yaratadi."
-          }]
-        },
-        {
-          id: "it-5",
-          title: "Massivlar (Arrays) va sikllar",
-          theory: "<h3>Massivlar</h3><p>Massiv bir nechta qiymatni bitta o‘zgaruvchida tartibli saqlaydi. Indekslash 0 dan boshlanadi.</p>",
-          example: "const fanlar = ['Ona tili', 'Matematika', 'IT'];\nconsole.log(fanlar[0]);",
-          quiz: [{
-            q: "JavaScript massivida birinchi element qaysi indeksda turadi?",
-            opts: ["0", "1", "-1"],
-            ans: 0,
-            exp: "Massiv elementlari 0-indeksdan boshlab raqamlanadi."
-          }]
-        },
-        {
-          id: "it-6",
-          title: "Obyektlar (Objects) va JSON",
-          theory: "<h3>Obyektlar</h3><p>Obyektlar ma’lumotlarni <code>kalit: qiymat</code> juftligi ko‘rinishida saqlaydi.</p>",
-          example: "const talaba = { ism: 'Abdulhafiz', ball: 100 };",
-          quiz: [{
-            q: "Obyekt xususiyatlari qanday ko‘rinishda yoziladi?",
-            opts: ["kalit: qiymat", "indeks -> qiymat", "faqat raqam"],
-            ans: 0,
-            exp: "Obyektlar kalit va qiymat juftligidan tashkil topadi."
-          }]
-        },
-        {
-          id: "it-7",
-          title: "DOM bilan ishlash va hodisalar (Events)",
-          theory: "<h3>DOM manipulyatsiyasi</h3><p>DOM yordamida JavaScript orqali HTML elementlar matni, rangi va bosish (<code>click</code>) hodisalarini boshqarish mumkin.</p>",
-          example: "btn.addEventListener('click', () => alert('Bosildi!'));",
-          quiz: [{
-            q: "Tugma bosilganda kod bajarish uchun qaysi hodisa ishlatiladi?",
-            opts: ["click", "hover", "resize"],
-            ans: 0,
-            exp: "click hodisasi foydalanuvchi tugmani bosganda ishga tushadi."
-          }]
-        },
-        {
-          id: "it-8",
-          title: "Git, GitHub va saytni joylashtirish",
-          theory: "<h3>GitHub Pages</h3><p>Git versiyalarni nazorat qiladi, GitHub esa kodni bulutda saqlaydi va GitHub Pages orqali veb-saytni bepul ishga tushiradi.</p>",
-          example: "1. index.html ni yangilash\n2. Commit changes\n3. GitHub Pages da ko‘rish",
-          quiz: [{
-            q: "GitHub’da statik veb-saytni bepul chop etish xizmati qanday ataladi?",
-            opts: ["GitHub Pages", "GitHub Actions", "GitHub Gist"],
-            ans: 0,
-            exp: "GitHub Pages repozitoriyadagi HTML/CSS/JS saytni to‘g‘ridan-to‘g‘ri internetda ochadi."
-          }]
-        }
+        { id: "it-1", title: "HTML asoslari va semantik teglar", theory: "<h3>HTML tuzilishi</h3><p>HTML veb-sahifaning tuzilishini belgilaydi. Sarlavha, matn, ro‘yxat va havolalar teglar yordamida yaratiladi.</p>", example: "<h1>Abdulhafiz Akademiyasi</h1>\n<p>Dasturlashni o‘rganamiz</p>", quiz: [{ q: "Veb-sahifaning asosiy tuzilishini qaysi til yaratadi?", opts: ["HTML", "CSS", "SQL"], ans: 0, exp: "HTML sahifa skeletini yaratadi, CSS dizayn beradi." }] },
+        { id: "it-2", title: "JavaScript o‘zgaruvchilari va funksiyalar", theory: "<h3>JavaScript asoslari</h3><p>JavaScript sahifaga interaktivlik qo‘shadi. O‘zgaruvchilar <code>let</code> va <code>const</code> bilan e’lon qilinadi.</p>", example: "const ball = 95;\nfunction natija(b) { return b >= 60 ? 'O‘tdi' : 'Qayta urining'; }", quiz: [{ q: "JavaScript da o‘zgarmas qiymat qaysi kalit so‘z bilan e’lon qilinadi?", opts: ["const", "var", "static"], ans: 0, exp: "const o‘zgarmas qiymat e’lon qilish uchun ishlatiladi." }] },
+        { id: "it-3", title: "Algoritmlar va shart operatorlari", theory: "<h3>Shart operatorlari</h3><p>Dasturda qaror qabul qilish uchun <code>if / else</code> shart operatorlari ishlatiladi.</p>", example: "if (x > 0) {\n  console.log('Musbat son');\n}", quiz: [{ q: "Dasturda shart tekshirish uchun qaysi operator ishlatiladi?", opts: ["if / else", "break", "import"], ans: 0, exp: "if / else shart rost yoki yolg‘onligiga qarab tarmoqlanadi." }] },
+        { id: "it-4", title: "CSS Flexbox va moslashuvchan dizayn", theory: "<h3>CSS Flexbox</h3><p><code>display: flex</code> elementlarni bir qatorda yoki ustunda qulay joylashtirish va ekranlarga moslashtirish uchun ishlatiladi.</p>", example: ".container {\n  display: flex;\n  justify-content: space-between;\n}", quiz: [{ q: "Elementlarni moslashuvchan joylashtirish uchun qaysi CSS xususiyat ishlatiladi?", opts: ["display: flex", "text-align: justify", "font-weight: bold"], ans: 0, exp: "display: flex moslashuvchan konteyner yaratadi." }] },
+        { id: "it-5", title: "Massivlar (Arrays) va sikllar", theory: "<h3>Massivlar</h3><p>Massiv bir nechta qiymatni bitta o‘zgaruvchida tartibli saqlaydi. Indekslash 0 dan boshlanadi.</p>", example: "const fanlar = ['Ona tili', 'Matematika', 'IT'];\nconsole.log(fanlar[0]);", quiz: [{ q: "JavaScript massivida birinchi element qaysi indeksda turadi?", opts: ["0", "1", "-1"], ans: 0, exp: "Massiv elementlari 0-indeksdan boshlab raqamlanadi." }] },
+        { id: "it-6", title: "Obyektlar (Objects) va JSON", theory: "<h3>Obyektlar</h3><p>Obyektlar ma’lumotlarni <code>kalit: qiymat</code> juftligi ko‘rinishida saqlaydi.</p>", example: "const talaba = { ism: 'Abdulhafiz', ball: 100 };", quiz: [{ q: "Obyekt xususiyatlari qanday ko‘rinishda yoziladi?", opts: ["kalit: qiymat", "indeks -> qiymat", "faqat raqam"], ans: 0, exp: "Obyektlar kalit va qiymat juftligidan tashkil topadi." }] },
+        { id: "it-7", title: "DOM bilan ishlash va hodisalar (Events)", theory: "<h3>DOM manipulyatsiyasi</h3><p>DOM yordamida JavaScript orqali HTML elementlar matni, rangi va bosish (<code>click</code>) hodisalarini boshqarish mumkin.</p>", example: "btn.addEventListener('click', () => alert('Bosildi!'));", quiz: [{ q: "Tugma bosilganda kod bajarish uchun qaysi hodisa ishlatiladi?", opts: ["click", "hover", "resize"], ans: 0, exp: "click hodisasi foydalanuvchi tugmani bosganda ishga tushadi." }] },
+        { id: "it-8", title: "Git, GitHub va saytni joylashtirish", theory: "<h3>GitHub Pages</h3><p>Git versiyalarni nazorat qiladi, GitHub esa kodni bulutda saqlaydi va GitHub Pages orqali veb-saytni bepul ishga tushiradi.</p>", example: "1. index.html ni yangilash\n2. Commit changes\n3. GitHub Pages da ko‘rish", quiz: [{ q: "GitHub’da statik veb-saytni bepul chop etish xizmati qanday ataladi?", opts: ["GitHub Pages", "GitHub Actions", "GitHub Gist"], ans: 0, exp: "GitHub Pages repozitoriyadagi HTML/CSS/JS saytni to‘g‘ridan-to‘g‘ri internetda ochadi." }] },
+        { id: "it-9", title: "CSS Grid va kartochka maketlari", theory: "<h3>CSS Grid</h3><p><code>display: grid</code> sahifani satr va ustunlarga ajratib, zamonaviy kartochka tizimlarini yaratishda qo‘llanadi.</p>", example: "display: grid;\ngrid-template-columns: repeat(3, 1fr);", quiz: [{ q: "Uchta teng ustun yaratish uchun qaysi qiymat ishlatiladi?", opts: ["repeat(3, 1fr)", "3-columns", "auto-row"], ans: 0, exp: "repeat(3, 1fr) uchta bir xil kenglikdagi ustun hosil qiladi." }] },
+        { id: "it-10", title: "LocalStorage va ma’lumotlarni saqlash", theory: "<h3>LocalStorage</h3><p><code>localStorage</code> brauzerda ma’lumotlarni sahifa yangilanganda ham saqlab turish imkonini beradi.</p>", example: "localStorage.setItem('rejim', 'dark');", quiz: [{ q: "LocalStorage ga qiymat yozish metodi qaysi?", opts: ["setItem()", "push()", "append()"], ans: 0, exp: "localStorage.setItem(kalit, qiymat) ma’lumotni xotiraga saqlaydi." }] },
+        { id: "it-11", title: "Ma’lumotlar bazasi va Firebase asoslari", theory: "<h3>Realtime Database</h3><p>Bulutli ma’lumotlar bazasi foydalanuvchilar o‘rtasida ma’lumotlarni real vaqtda sinxronlashtiradi.</p>", example: "db.ref('usersProgress').on('value', snap => ...);", quiz: [{ q: "Real vaqtda o‘zgarishlarni kuzatish metodi qaysi?", opts: ["on('value', ...)", "fetch()", "alert()"], ans: 0, exp: "Firebase Realtime Database da on('value', ...) o‘zgarishlarni darhol eshitadi." }] },
+        { id: "it-12", title: "Xatoliklar bilan ishlash (try / catch)", theory: "<h3>Xatoliklarni boshqarish</h3><p><code>try / catch</code> bloki kutilmagan xato yuz berganda dastur to‘xtab qolmasligini ta’minlaydi.</p>", example: "try {\n  JSON.parse(data);\n} catch (err) {\n  console.error(err);\n}", quiz: [{ q: "Xatoni ushlash uchun qaysi blok ishlatiladi?", opts: ["catch", "finally", "throw"], ans: 0, exp: "try ichidagi xato yuz berganda boshqaruv catch blokiga o‘tadi." }] }
       ]
     };
+
+    const ENGLISH_BOT_WORDS = [
+      "apple", "elephant", "tiger", "rabbit", "tree", "earth", "house", "engine",
+      "eagle", "lemon", "notebook", "key", "yellow", "window", "water", "river",
+      "rose", "egg", "garden", "night", "table", "ear", "road", "dog", "goat",
+      "train", "nest", "top", "pen", "sun", "nut", "tea", "ant", "toy", "yard"
+    ];
 
     const SESSION_KEY = "aa_g_session_v2";
     const THEME_KEY = "aa_theme_v1";
@@ -1710,6 +1816,8 @@
       teacherRequests: [],
       forumPosts: [],
       googleUsers: [],
+      phoneUsers: [],
+      emailMessages: [],
       usersProgress: {}
     };
 
@@ -1717,15 +1825,191 @@
     let currentSubjectId = null;
     let currentLessonId = null;
     let quizState = { items: [], idx: 0, score: 0, answered: false };
+    let recaptchaVerifier = null;
+    let confirmationResultObj = null;
+    let pendingEmailAuth = null;
+
+    let wordGameState = {
+      mode: "2p",
+      turn: 1,
+      p1Score: 0,
+      p2Score: 0,
+      usedWords: [],
+      requiredLetter: ""
+    };
+
+    function toggleMenuDrawer() {
+      const drawer = document.getElementById("menu-drawer");
+      const backdrop = document.getElementById("menu-drawer-backdrop");
+      const isOpen = drawer.classList.contains("open");
+      if (isOpen) closeMenuDrawer();
+      else {
+        drawer.classList.add("open");
+        backdrop.classList.add("open");
+      }
+    }
+
+    function closeMenuDrawer() {
+      document.getElementById("menu-drawer").classList.remove("open");
+      document.getElementById("menu-drawer-backdrop").classList.remove("open");
+    }
+
+    function selectMenuAction(action) {
+      closeMenuDrawer();
+      if (action === "courses") goHome();
+      else if (action === "wordgame") openWordGameView();
+      else if (action === "rating") openRatingView();
+      else if (action === "forum") openForumView();
+      else if (action === "admin") openAdminView();
+    }
+
+    function switchAuthMode(mode) {
+      const isPhone = mode === "phone";
+      document.getElementById("mode-btn-email").classList.toggle("active", !isPhone);
+      document.getElementById("mode-btn-phone").classList.toggle("active", isPhone);
+      document.getElementById("auth-mode-email").style.display = isPhone ? "none" : "block";
+      document.getElementById("auth-mode-phone").style.display = isPhone ? "block" : "none";
+
+      if (isPhone && !recaptchaVerifier) {
+        try {
+          recaptchaVerifier = new firebase.auth.RecaptchaVerifier("recaptcha-container", {
+            size: "normal"
+          });
+          recaptchaVerifier.render();
+        } catch {}
+      }
+    }
+
+    function sendEmailNotificationCode() {
+      const nameVal = document.getElementById("gate-name").value.trim();
+      const emailVal = document.getElementById("gate-email").value.trim().toLowerCase();
+      const customMsg = document.getElementById("gate-email-msg").value.trim();
+
+      if (!emailVal || !emailVal.includes("@")) {
+        showToast("Iltimos, to‘g‘ri email manzil kiriting.");
+        return;
+      }
+
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      const nowTs = Date.now();
+      const msgRecord = {
+        id: "mail-" + nowTs,
+        toEmail: emailVal,
+        senderName: nameVal || emailVal.split("@")[0],
+        code,
+        message: customMsg || `Abdulhafiz Akademiyasiga kirish kodi: ${code}`,
+        sentAt: new Date(nowTs).toLocaleString("uz-UZ"),
+        createdAt: nowTs
+      };
+
+      pendingEmailAuth = {
+        name: nameVal || emailVal.split("@")[0],
+        email: emailVal,
+        code,
+        message: msgRecord.message
+      };
+
+      db.ref("emailMessages/" + msgRecord.id).set(msgRecord);
+
+      document.getElementById("email-code-verify-box").style.display = "block";
+      document.getElementById("email-sent-info").innerHTML =
+        `<strong>${emailVal}</strong> manziliga xabar va 6 xonali kod yuborildi.<br>` +
+        `Tasdiqlash kodi: <strong style="color: var(--primary); font-size: 1.05em;">${code}</strong>`;
+      showToast(`${emailVal} manziliga xabar va kod yuborildi!`);
+    }
+
+    function verifyEmailCodeAndLogin() {
+      const entered = document.getElementById("email-otp-input").value.trim();
+      if (!pendingEmailAuth) {
+        showToast("Avval «Emailga xabar yuborish» tugmasini bosing.");
+        return;
+      }
+      if (!entered || entered !== pendingEmailAuth.code) {
+        showToast("Kod noto‘g‘ri kiritildi.");
+        return;
+      }
+      completeGoogleAuth(
+        pendingEmailAuth.name,
+        pendingEmailAuth.email,
+        "",
+        "Email xabar/kod",
+        ""
+      );
+      pendingEmailAuth = null;
+      document.getElementById("email-otp-input").value = "";
+      document.getElementById("email-code-verify-box").style.display = "none";
+    }
+
+    function sendSmsCode() {
+      const rawPhone = document.getElementById("phone-number").value.trim();
+      const phone = rawPhone.replace(/\s+/g, "");
+      if (!phone.startsWith("+") || phone.length < 10) {
+        showToast("Telefon raqamni xalqaro formatda kiriting (masalan: +998901234567).");
+        return;
+      }
+
+      if (!recaptchaVerifier) {
+        recaptchaVerifier = new firebase.auth.RecaptchaVerifier("recaptcha-container", {
+          size: "normal"
+        });
+      }
+
+      const btn = document.getElementById("send-sms-btn");
+      btn.disabled = true;
+      btn.textContent = "SMS yuborilmoqda...";
+
+      auth.signInWithPhoneNumber(phone, recaptchaVerifier)
+        .then(confirmationResult => {
+          confirmationResultObj = confirmationResult;
+          document.getElementById("otp-verify-box").style.display = "block";
+          btn.disabled = false;
+          btn.textContent = "📩 SMS kodni qayta yuborish";
+          showToast(`${phone} raqamiga SMS kod yuborildi!`);
+        })
+        .catch(() => {
+          btn.disabled = false;
+          btn.textContent = "📩 SMS kod yuborish";
+          showToast("SMS yuborilmadi. Firebase Phone Auth sozlamalari va raqamni tekshiring.");
+        });
+    }
+
+    function verifySmsCode() {
+      const code = document.getElementById("sms-code-input").value.trim();
+      if (!code || code.length < 4 || !confirmationResultObj) {
+        showToast("SMS orqali kelgan kodni kiriting.");
+        return;
+      }
+
+      confirmationResultObj.confirm(code)
+        .then(result => {
+          const phoneVal = (result.user && result.user.phoneNumber) || document.getElementById("phone-number").value.trim();
+          const customName = document.getElementById("phone-name").value.trim();
+          const displayName = customName || phoneVal;
+          const uidKey = encodeKey(phoneVal);
+          const nowTs = Date.now();
+
+          db.ref("phoneUsers/" + uidKey).set({
+            name: displayName,
+            phone: phoneVal,
+            lastLogin: new Date(nowTs).toLocaleString("uz-UZ"),
+            lastLoginTs: nowTs
+          });
+
+          completeGoogleAuth(displayName, uidKey + "@phone.local", "", "SMS / Telefon", phoneVal);
+        })
+        .catch(() => {
+          showToast("SMS kod noto‘g‘ri yoki muddati o‘tgan.");
+        });
+    }
 
     function applyAppearanceSettings() {
       const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
       const isLight = savedTheme === "light";
       document.body.classList.toggle("light-theme", isLight);
-      const tBtn = document.getElementById("theme-toggle-btn");
-      if (tBtn) tBtn.textContent = isLight ? "🌙 Qorong‘i" : "☀️ Yorug‘";
       const railIco = document.getElementById("rail-theme-ico");
       if (railIco) railIco.textContent = isLight ? "🌙" : "☀️";
+      const drawerThemeLbl = document.getElementById("drawer-theme-label");
+      if (drawerThemeLbl) drawerThemeLbl.textContent = isLight ? "🌙 Qorong‘i rejim" : "☀️ Yorug‘ rejim";
 
       const scale = parseFloat(localStorage.getItem(FONT_KEY) || "1");
       const clamped = Math.min(1.28, Math.max(0.85, scale));
@@ -1764,7 +2048,7 @@
     }
 
     function encodeKey(str) {
-      return (str || "").toLowerCase().replace(/[.#$[\]/@]/g, "_");
+      return (str || "").toLowerCase().replace(/[.#$[\]/@+]/g, "_");
     }
 
     function normalizeArray(val) {
@@ -1784,9 +2068,9 @@
           const ma = normalizeArray(val.math);
           const it = normalizeArray(val.it);
           appState.lessons = {
-            uzbek: uz.length >= DEFAULT_LESSONS.uzbek.length ? uz : DEFAULT_LESSONS.uzbek,
-            math: ma.length >= DEFAULT_LESSONS.math.length ? ma : DEFAULT_LESSONS.math,
-            it: it.length >= DEFAULT_LESSONS.it.length ? it : DEFAULT_LESSONS.it
+            uzbek: uz.length ? uz : DEFAULT_LESSONS.uzbek,
+            math: ma.length ? ma : DEFAULT_LESSONS.math,
+            it: it.length ? it : DEFAULT_LESSONS.it
           };
         }
         refreshActiveViews();
@@ -1838,6 +2122,16 @@
         if (isAdminUser()) renderAdminPanel();
       });
 
+      db.ref("phoneUsers").on("value", snap => {
+        appState.phoneUsers = normalizeArray(snap.val()).sort((a, b) => (b.lastLoginTs || 0) - (a.lastLoginTs || 0));
+        if (isAdminUser()) renderAdminPanel();
+      });
+
+      db.ref("emailMessages").on("value", snap => {
+        appState.emailMessages = normalizeArray(snap.val()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        if (isAdminUser()) renderAdminPanel();
+      });
+
       db.ref("usersProgress").on("value", snap => {
         const raw = snap.val() || {};
         const parsed = {};
@@ -1846,6 +2140,7 @@
             parsed[v.email.toLowerCase()] = {
               name: v.name || v.email.split("@")[0],
               email: v.email.toLowerCase(),
+              phone: v.phone || "",
               completed: normalizeArray(v.completed)
             };
           }
@@ -1895,20 +2190,22 @@
       const entry = {
         name: profile.name,
         email: profile.email.toLowerCase(),
+        phone: profile.phone || "",
         picture: profile.picture || "",
-        authMethod: profile.authMethod || "Google hisob",
+        authMethod: profile.authMethod || "Google / Email",
         lastLogin: new Date(nowTs).toLocaleString("uz-UZ"),
         lastLoginTs: nowTs
       };
       db.ref("googleUsers/" + key).set(entry);
     }
 
-    function completeGoogleAuth(name, email, picture = "", authMethod = "Google hisob") {
+    function completeGoogleAuth(name, email, picture = "", authMethod = "Google / Email", phone = "") {
       const cleanEmail = email.trim().toLowerCase();
-      const cleanName = (name || cleanEmail.split("@")[0] || "Foydalanuvchi").trim();
+      const cleanName = (name || phone || cleanEmail.split("@")[0] || "Foydalanuvchi").trim();
       currentUser = {
         name: cleanName,
         email: cleanEmail,
+        phone,
         picture,
         authMethod
       };
@@ -1920,6 +2217,7 @@
       db.ref("usersProgress/" + pKey).set({
         name: cleanName,
         email: cleanEmail,
+        phone: phone || (existingProg && existingProg.phone) || "",
         completed: existingProg ? existingProg.completed : []
       });
 
@@ -1951,15 +2249,29 @@
     function loginFromGate() {
       const name = document.getElementById("gate-name").value.trim();
       const email = document.getElementById("gate-email").value.trim();
+      const customMsg = document.getElementById("gate-email-msg").value.trim();
       if (!email || !email.includes("@")) {
-        showToast("Iltimos, to‘g‘ri Gmail manzil kiriting.");
+        showToast("Iltimos, to‘g‘ri email manzil kiriting.");
         return;
       }
-      completeGoogleAuth(name || email.split("@")[0], email, "", "Google hisob");
+      if (customMsg) {
+        const nowTs = Date.now();
+        db.ref("emailMessages/mail-" + nowTs).set({
+          id: "mail-" + nowTs,
+          toEmail: email.toLowerCase(),
+          senderName: name || email.split("@")[0],
+          code: "—",
+          message: customMsg,
+          sentAt: new Date(nowTs).toLocaleString("uz-UZ"),
+          createdAt: nowTs
+        });
+      }
+      completeGoogleAuth(name || email.split("@")[0], email, "", "Email hisob");
     }
 
     function logoutUser() {
       localStorage.removeItem(SESSION_KEY);
+      try { auth.signOut(); } catch {}
       currentUser = null;
       document.getElementById("app-shell").classList.remove("unlocked");
       document.getElementById("auth-gate").style.display = "flex";
@@ -1984,6 +2296,7 @@
       db.ref("usersProgress/" + pKey).set({
         name: currentUser.name,
         email,
+        phone: currentUser.phone || "",
         completed: updated
       });
     }
@@ -2010,12 +2323,14 @@
         roleWrap.innerHTML = `<span class="pill">🎓 O‘quvchi</span>`;
       }
 
-      const adminBtn = document.getElementById("admin-panel-btn");
+      const drawerAdminBtn = document.getElementById("drawer-admin");
       const railAdminBtn = document.getElementById("rail-admin");
       const pendingCount = appState.teacherRequests.filter(r => r.status === "pending").length;
-      document.getElementById("pending-badge-count").textContent = pendingCount;
+      const drawerPending = document.getElementById("drawer-pending-count");
+      if (drawerPending) drawerPending.textContent = pendingCount;
+
       const showAdmin = isAdminUser();
-      adminBtn.style.display = showAdmin ? "inline-flex" : "none";
+      if (drawerAdminBtn) drawerAdminBtn.style.display = showAdmin ? "flex" : "none";
       if (railAdminBtn) railAdminBtn.style.display = showAdmin ? "flex" : "none";
 
       const initial = (currentUser.name || "A").charAt(0).toUpperCase();
@@ -2034,22 +2349,12 @@
 
     function setActiveNav(tabKey) {
       document.querySelectorAll(".rail-btn[id^='rail-']").forEach(b => b.classList.remove("active"));
-      if (tabKey === "courses") {
-        const r = document.getElementById("rail-courses");
-        if (r) r.classList.add("active");
-      }
-      if (tabKey === "rating") {
-        const r = document.getElementById("rail-rating");
-        if (r) r.classList.add("active");
-      }
-      if (tabKey === "forum") {
-        const r = document.getElementById("rail-forum");
-        if (r) r.classList.add("active");
-      }
-      if (tabKey === "admin") {
-        const r = document.getElementById("rail-admin");
-        if (r) r.classList.add("active");
-      }
+      document.querySelectorAll(".drawer-item-btn[id^='drawer-']").forEach(b => b.classList.remove("active"));
+
+      const r = document.getElementById("rail-" + tabKey);
+      if (r) r.classList.add("active");
+      const d = document.getElementById("drawer-" + tabKey);
+      if (d) d.classList.add("active");
     }
 
     function showView(viewId) {
@@ -2115,6 +2420,144 @@
         } else {
           applyBtn.textContent = "👨‍🏫 Ustoz bo‘lish uchun so‘rov";
         }
+      }
+    }
+
+    /* Ingliz tili 2 ishtirokchili so'z zanjiri o'yini */
+    function openWordGameView() {
+      setActiveNav("wordgame");
+      showView("view-wordgame");
+      renderWordGame();
+    }
+
+    function changeWordGameMode() {
+      wordGameState.mode = document.getElementById("wordgame-mode-select").value;
+      resetWordGame();
+    }
+
+    function resetWordGame() {
+      wordGameState = {
+        mode: document.getElementById("wordgame-mode-select").value,
+        turn: 1,
+        p1Score: 0,
+        p2Score: 0,
+        usedWords: [],
+        requiredLetter: ""
+      };
+      document.getElementById("wg-status-msg").textContent = "";
+      document.getElementById("wg-word-input").value = "";
+      renderWordGame();
+    }
+
+    function renderWordGame() {
+      const isBot = wordGameState.mode === "bot";
+      document.getElementById("wg-p2-title").textContent = isBot ? "Sherik (Lug‘at)" : "2-ishtirokchi";
+      document.getElementById("wg-p1-score").textContent = `${wordGameState.p1Score} ball`;
+      document.getElementById("wg-p2-score").textContent = `${wordGameState.p2Score} ball`;
+
+      const p1Card = document.getElementById("wg-p1-card");
+      const p2Card = document.getElementById("wg-p2-card");
+      p1Card.classList.toggle("turn-active", wordGameState.turn === 1);
+      p2Card.classList.toggle("turn-active", wordGameState.turn === 2);
+
+      const reqBadge = document.getElementById("wg-req-letter");
+      const turnLabel = document.getElementById("wg-turn-label");
+      const ruleHint = document.getElementById("wg-rule-hint");
+
+      if (!wordGameState.requiredLetter) {
+        reqBadge.textContent = "—";
+        ruleHint.textContent = "O‘yinni boshlash uchun istalgan inglizcha so‘z ayting (masalan: apple)";
+      } else {
+        reqBadge.textContent = wordGameState.requiredLetter.toUpperCase();
+        ruleHint.textContent = `So‘z «${wordGameState.requiredLetter.toUpperCase()}» harfi bilan boshlanishi kerak`;
+      }
+
+      if (wordGameState.turn === 1) {
+        turnLabel.textContent = "1-ishtirokchi navbati";
+      } else {
+        turnLabel.textContent = isBot ? "Sherik navbati..." : "2-ishtirokchi navbati";
+      }
+
+      const chainEl = document.getElementById("wg-chain-list");
+      if (!wordGameState.usedWords.length) {
+        chainEl.innerHTML = `<span style="color: var(--text-dim); font-size: 0.9em;">Hali so‘z aytilmagan. Birinchi so‘zni yozing!</span>`;
+      } else {
+        chainEl.innerHTML = wordGameState.usedWords.map((item, idx) => {
+          const w = item.word;
+          const head = w.slice(0, -1);
+          const tail = w.slice(-1);
+          return `
+            <div class="word-chip">
+              <span style="color: var(--text-dim);">${idx + 1}.</span>
+              <span>${head}<span class="last-ch">${tail}</span></span>
+              <span style="font-size: 0.78em; color: var(--text-dim);">(${item.by})</span>
+            </div>
+          `;
+        }).join("");
+      }
+    }
+
+    function submitWordGameWord() {
+      const inp = document.getElementById("wg-word-input");
+      const raw = inp.value.trim().toLowerCase();
+      const statusEl = document.getElementById("wg-status-msg");
+
+      if (!/^[a-z]{2,25}$/.test(raw)) {
+        statusEl.style.color = "var(--danger)";
+        statusEl.textContent = "Faqat ingliz harflaridan iborat kamida 2 harfli so‘z kiriting (masalan: tiger).";
+        return;
+      }
+
+      if (wordGameState.requiredLetter && raw[0] !== wordGameState.requiredLetter) {
+        statusEl.style.color = "var(--danger)";
+        statusEl.textContent = `Xato! «${raw}» so‘zi «${wordGameState.requiredLetter.toUpperCase()}» harfi bilan boshlanishi kerak.`;
+        return;
+      }
+
+      const alreadyUsed = wordGameState.usedWords.some(item => item.word === raw);
+      if (alreadyUsed) {
+        statusEl.style.color = "var(--danger)";
+        statusEl.textContent = `«${raw}» so‘zi oldin aytilgan! Boshqa inglizcha so‘z tanlang.`;
+        return;
+      }
+
+      const actorName = wordGameState.turn === 1
+        ? "1-ishtirokchi"
+        : (wordGameState.mode === "bot" ? "Sherik" : "2-ishtirokchi");
+
+      wordGameState.usedWords.push({ word: raw, by: actorName });
+      if (wordGameState.turn === 1) wordGameState.p1Score += 10;
+      else wordGameState.p2Score += 10;
+
+      const nextLetter = raw[raw.length - 1];
+      wordGameState.requiredLetter = nextLetter;
+      inp.value = "";
+
+      statusEl.style.color = "var(--primary)";
+      statusEl.textContent = `✓ Qabul qilindi: «${raw}» (+10 ball). Keyingi so‘z «${nextLetter.toUpperCase()}» harfi bilan boshlanadi.`;
+
+      if (wordGameState.mode === "bot") {
+        wordGameState.turn = 2;
+        renderWordGame();
+        setTimeout(() => {
+          const usedSet = new Set(wordGameState.usedWords.map(x => x.word));
+          const candidate = ENGLISH_BOT_WORDS.find(w => w[0] === nextLetter && !usedSet.has(w));
+          if (candidate) {
+            wordGameState.usedWords.push({ word: candidate, by: "Sherik" });
+            wordGameState.p2Score += 10;
+            wordGameState.requiredLetter = candidate[candidate.length - 1];
+            statusEl.style.color = "var(--secondary)";
+            statusEl.textContent = `Sherik «${candidate}» dedi (+10 ball). Endi siz «${wordGameState.requiredLetter.toUpperCase()}» harfiga so‘z ayting!`;
+          } else {
+            statusEl.style.color = "var(--primary)";
+            statusEl.textContent = `Tabriklaymiz! Sherik «${nextLetter.toUpperCase()}» harfiga yangi so‘z topa olmadi — siz yutdingiz!`;
+          }
+          wordGameState.turn = 1;
+          renderWordGame();
+        }, 450);
+      } else {
+        wordGameState.turn = wordGameState.turn === 1 ? 2 : 1;
+        renderWordGame();
       }
     }
 
@@ -2223,7 +2666,7 @@
       const lessonObj = (appState.lessons[currentSubjectId] || []).find(l => l.id === currentLessonId);
       const lessonTitle = (lessonObj && lessonObj.title) || "Dars";
       const userName = (currentUser && currentUser.name) || "O‘quvchi";
-      const userEmail = (currentUser && currentUser.email) || "";
+      const userContact = (currentUser && (currentUser.phone || currentUser.email)) || "";
       const todayStr = new Date().toLocaleDateString("uz-UZ");
 
       return `
@@ -2234,10 +2677,10 @@
           <div class="certificate-student">${userName}</div>
           <p style="font-size: 0.95em;"><strong>${subName}</strong> — «${lessonTitle}»</p>
           <p style="color: var(--primary); font-weight: 700; margin-top: 0.45rem;">Natija: ${scoreText}</p>
-          <p style="color: var(--text-dim); font-size: 0.85em; margin-top: 0.5rem;">${userEmail} • Sana: ${todayStr}</p>
+          <p style="color: var(--text-dim); font-size: 0.85em; margin-top: 0.5rem;">${userContact} • Sana: ${todayStr}</p>
           <div class="no-print" style="margin-top: 1.2rem; display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap;">
-            <button class="btn" onclick="window.print()">🖨️ Sertifikatni chop etish / PDF</button>
-            <button class="btn btn-ghost" onclick="backToSubject()">Darslarga qaytish</button>
+            <button type="button" class="btn" onclick="window.print()">🖨️ Sertifikatni chop etish / PDF</button>
+            <button type="button" class="btn btn-ghost" onclick="backToSubject()">Darslarga qaytish</button>
           </div>
         </div>
       `;
@@ -2286,7 +2729,7 @@
       document.getElementById("q-score").textContent = `To‘g‘ri: ${score}`;
       document.getElementById("q-text").textContent = item.q;
       document.getElementById("q-options").innerHTML = opts.map((opt, oIdx) => `
-        <button class="option-btn" onclick="answerQuiz(${oIdx})">${opt}</button>
+        <button type="button" class="option-btn" onclick="answerQuiz(${oIdx})">${opt}</button>
       `).join("");
     }
 
@@ -2546,9 +2989,9 @@
             </div>
             <p style="line-height: 1.55;">${p.text}</p>
             <div class="post-actions">
-              <button class="like-btn ${liked ? "liked" : ""}" onclick="toggleForumLike('${p.id}')">👍 Foydali (${likes.length})</button>
+              <button type="button" class="like-btn ${liked ? "liked" : ""}" onclick="toggleForumLike('${p.id}')">👍 Foydali (${likes.length})</button>
               <input type="text" id="reply-inp-${p.id}" class="modal-input" style="max-width: 280px; margin: 0; padding: 0.45rem 0.75rem;" placeholder="Javob yozish..." />
-              <button class="btn btn-ghost" style="padding: 0.45rem 0.9rem; font-size: 0.85em;" onclick="addForumReply('${p.id}')">Javob berish</button>
+              <button type="button" class="btn btn-ghost" style="padding: 0.45rem 0.9rem; font-size: 0.85em;" onclick="addForumReply('${p.id}')">Javob berish</button>
             </div>
             ${repliesHtml ? `<div class="replies-box">${repliesHtml}</div>` : ""}
           </div>
@@ -2598,6 +3041,40 @@
 
     function renderAdminPanel() {
       if (!isAdminUser()) return;
+
+      const phoneBox = document.getElementById("phone-users-list");
+      const pUsers = appState.phoneUsers || [];
+      if (!pUsers.length) {
+        phoneBox.innerHTML = `<p style="color: var(--text-dim);">Hali telefon raqam bilan kirgan foydalanuvchilar yo‘q.</p>`;
+      } else {
+        phoneBox.innerHTML = pUsers.map(u => `
+          <div class="request-card">
+            <div>
+              <strong>${u.name || u.phone}</strong> • <span style="color: var(--primary); font-weight: 700;">${u.phone}</span>
+              <div style="color: var(--text-dim); font-size: 0.84em;">Oxirgi kirish: ${u.lastLogin || ""}</div>
+            </div>
+            <span class="status-badge status-approved">SMS tasdiqlangan</span>
+          </div>
+        `).join("");
+      }
+
+      const mailBox = document.getElementById("email-messages-list");
+      const mList = appState.emailMessages || [];
+      if (!mList.length) {
+        mailBox.innerHTML = `<p style="color: var(--text-dim);">Hali email xabarlar yuborilmagan.</p>`;
+      } else {
+        mailBox.innerHTML = mList.map(m => `
+          <div class="request-card">
+            <div>
+              <strong>${m.toEmail}</strong> • <span style="color: var(--secondary); font-weight: 700;">Kod: ${m.code || "—"}</span>
+              <div style="font-size: 0.9em; margin-top: 0.25rem;">${m.message || ""}</div>
+              <div style="color: var(--text-dim); font-size: 0.82em; margin-top: 0.2rem;">Yuborilgan: ${m.sentAt || ""}</div>
+            </div>
+            <span class="status-badge status-approved">Email xabar</span>
+          </div>
+        `).join("");
+      }
+
       const reqs = appState.teacherRequests || [];
       const pending = reqs.filter(r => r.status === "pending");
       const approved = reqs.filter(r => r.status === "approved");
@@ -2616,8 +3093,8 @@
                 <p style="color: var(--text-dim); font-size: 0.9em; margin-top: 0.35rem;">${r.note}</p>
               </div>
               <div style="display: flex; gap: 0.6rem;">
-                <button class="btn" onclick="setRequestStatus('${rKey}', 'approved')">✓ Tasdiqlash</button>
-                <button class="btn btn-danger" onclick="setRequestStatus('${rKey}', 'rejected')">✕ Rad etish</button>
+                <button type="button" class="btn" onclick="setRequestStatus('${rKey}', 'approved')">✓ Tasdiqlash</button>
+                <button type="button" class="btn btn-danger" onclick="setRequestStatus('${rKey}', 'rejected')">✕ Rad etish</button>
               </div>
             </div>
           `;
@@ -2642,15 +3119,15 @@
       const googleBox = document.getElementById("google-users-list");
       const gUsers = appState.googleUsers || [];
       if (!gUsers.length) {
-        googleBox.innerHTML = `<p style="color: var(--text-dim);">Hali Google hisobda kirgan foydalanuvchilar yo‘q.</p>`;
+        googleBox.innerHTML = `<p style="color: var(--text-dim);">Hali kirgan foydalanuvchilar yo‘q.</p>`;
       } else {
         googleBox.innerHTML = gUsers.map(u => `
           <div class="request-card">
             <div>
-              <strong>${u.name}</strong> <span style="color: var(--secondary);">(${u.email})</span>
+              <strong>${u.name}</strong> <span style="color: var(--secondary);">(${u.phone || u.email})</span>
               <div style="color: var(--text-dim); font-size: 0.84em;">Usul: ${u.authMethod} • Oxirgi kirish: ${u.lastLogin}</div>
             </div>
-            <span class="status-badge status-approved">Google hisob</span>
+            <span class="status-badge status-approved">${u.authMethod}</span>
           </div>
         `).join("");
       }
@@ -2659,12 +3136,13 @@
     window.addEventListener("DOMContentLoaded", () => {
       applyAppearanceSettings();
       initRealtimeListeners();
+      renderWordGame();
       try {
         const raw = localStorage.getItem(SESSION_KEY);
         if (raw) {
           const saved = JSON.parse(raw);
           if (saved && saved.email) {
-            completeGoogleAuth(saved.name, saved.email, saved.picture || "", saved.authMethod || "Google hisob");
+            completeGoogleAuth(saved.name, saved.email, saved.picture || "", saved.authMethod || "Google / Email", saved.phone || "");
           }
         }
       } catch {}
