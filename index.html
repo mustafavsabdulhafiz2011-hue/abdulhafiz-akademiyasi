@@ -11,17 +11,13 @@
     :root {
       --bg-dark: #070b12;
       --bg-card: rgba(15, 23, 36, 0.78);
-      --bg-card-solid: #0f1724;
       --border: rgba(255, 255, 255, 0.08);
       --border-emerald: rgba(16, 185, 129, 0.35);
       --emerald: #10b981;
       --emerald-light: #34d399;
-      --emerald-dark: #059669;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --danger: #ef4444;
-      --warning: #f59e0b;
-      --indigo: #6366f1;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -115,7 +111,7 @@
       border-radius: 12px; padding: 12px; text-align: center; font-size: 0.85rem; font-weight: 600;
     }
 
-    /* MODAL AUTH */
+    /* MODALS (AUTH & TEACHER REQUEST) */
     .modal-backdrop {
       position: fixed; inset: 0; background: rgba(3, 6, 12, 0.82);
       backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center;
@@ -123,8 +119,8 @@
     }
     .modal-backdrop.open { display: flex; opacity: 1; }
     .auth-modal {
-      width: 100%; max-width: 440px;
-      background: rgba(15, 23, 38, 0.94);
+      width: 100%; max-width: 460px;
+      background: rgba(15, 23, 38, 0.96);
       border: 1px solid var(--border-emerald);
       border-radius: 24px; padding: 32px;
       box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75), 0 0 40px rgba(16, 185, 129, 0.18);
@@ -152,12 +148,14 @@
 
     .form-group { margin-bottom: 16px; position: relative; }
     .form-group label { display: block; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 7px; font-weight: 500; }
-    .form-input {
+    .form-input, textarea.form-input, select.form-input {
       width: 100%; padding: 13px 16px; border-radius: 12px;
       background: rgba(7, 11, 18, 0.85); border: 1px solid var(--border);
       color: #fff; font-size: 0.98rem; outline: none; transition: border-color 0.2s;
     }
-    .form-input:focus { border-color: var(--emerald); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15); }
+    .form-input:focus, textarea.form-input:focus, select.form-input:focus {
+      border-color: var(--emerald); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
     .eye-btn {
       position: absolute; right: 12px; top: 36px; background: none; border: none;
       color: var(--text-muted); cursor: pointer; font-size: 1rem;
@@ -198,11 +196,24 @@
       font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; font-weight: 700;
       background: rgba(16, 185, 129, 0.2); color: var(--emerald-light);
     }
+    .status-pending {
+      font-size: 0.75rem; padding: 3px 9px; border-radius: 99px; font-weight: 700;
+      background: rgba(245, 158, 11, 0.18); color: #fcd34d;
+    }
+    .status-done {
+      font-size: 0.75rem; padding: 3px 9px; border-radius: 99px; font-weight: 700;
+      background: rgba(16, 185, 129, 0.2); color: var(--emerald-light);
+    }
 
     .container { max-width: 1260px; margin: 0 auto; padding: 28px; }
     .section-view { display: none; }
     .section-view.active { display: block; animation: fadeIn 0.25s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .action-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 10px; margin-bottom: 18px;
+    }
 
     /* SUBJECT CARDS */
     .subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px; margin-bottom: 30px; }
@@ -400,10 +411,40 @@
     </div>
   </div>
 
+  <!-- ==================== USTOZGA SO'ROV YUBORISH MODALI ==================== -->
+  <div id="request-modal-backdrop" class="modal-backdrop">
+    <div class="auth-modal">
+      <button class="modal-close" onclick="closeTeacherRequestModal()">✕</button>
+      <h2 style="font-size:1.4rem; font-weight:800;">📩 Ustozga so‘rov yuborish</h2>
+      <p id="req-context-label" style="color:var(--emerald-light); font-size:0.86rem; margin-top:4px; margin-bottom:16px;">Umumiy so‘rov</p>
+
+      <div id="req-error" class="error-msg"></div>
+
+      <div class="form-group">
+        <label for="req-type">So‘rov turi</label>
+        <select id="req-type" class="form-input">
+          <option value="Mavzuni tushuntirish">Mavzuni qayta tushuntirish</option>
+          <option value="Topshiriq tekshirtirish">Topshiriq yoki yechimni tekshirtirish</option>
+          <option value="Qo'shimcha yordam">Qo‘shimcha savol / yordam</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="req-message">Xabaringizni yozing</label>
+        <textarea id="req-message" rows="4" class="form-input" placeholder="Qaysi joyi tushunarsiz bo‘ldi yoki ustozga qanday so‘rov yubormoqchisiz?"></textarea>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button type="button" class="btn btn-ghost" onclick="closeTeacherRequestModal()">← Orqaga</button>
+        <button type="button" class="btn btn-primary" style="flex:1;" onclick="submitTeacherRequest()">So‘rovni yuborish</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== MAIN ACADEMY APP ==================== -->
   <div id="app-view">
     <header class="app-header">
-      <div class="brand" onclick="switchTab('dashboard')">
+      <div class="brand" onclick="goBackOrDashboard()">
         <div class="brand-icon" style="width:36px; height:36px;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M12 3L21 19H3L12 3Z" fill="#FFFFFF"/>
@@ -418,7 +459,9 @@
         <button class="nav-tab" data-tab="mistakes" onclick="switchTab('mistakes')">
           🛠 Xatolar ustida ishlash <span id="mistakes-badge" class="badge-count" style="display:none;">0</span>
         </button>
-        <button class="nav-tab" id="admin-nav-btn" data-tab="admin" style="display:none;" onclick="switchTab('admin')">🛡 Admin panel</button>
+        <button class="nav-tab" id="admin-nav-btn" data-tab="admin" style="display:none;" onclick="switchTab('admin')">
+          🛡 Admin panel <span id="admin-req-badge" class="badge-count" style="display:none; background:#6366f1;">0</span>
+        </button>
       </nav>
 
       <div class="user-pill">
@@ -434,11 +477,14 @@
         <div style="margin-bottom:24px; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:14px;">
           <div>
             <h2 id="welcome-heading" style="font-size:1.75rem; font-weight:800;">Xush kelibsiz!</h2>
-            <p style="color:var(--text-muted); margin-top:4px;">O‘zingizga kerakli fanni tanlang va bosqichma-bosqich o‘zlashtiring.</p>
+            <p style="color:var(--text-muted); margin-top:4px;">O‘zingizga kerakli fanni tanlang yoki ustozga so‘rov yuboring.</p>
           </div>
-          <div class="glass-box" style="padding:12px 20px; border-radius:14px;">
-            <span style="color:var(--text-muted); font-size:0.85rem;">Umumiy natija: </span>
-            <strong id="overall-progress-text" style="color:var(--emerald-light); font-size:1.1rem;">0%</strong>
+          <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" onclick="openTeacherRequestModal('Umumiy bo‘lim')">📩 Ustozga so‘rov yuborish</button>
+            <div class="glass-box" style="padding:10px 18px; border-radius:14px;">
+              <span style="color:var(--text-muted); font-size:0.85rem;">Umumiy natija: </span>
+              <strong id="overall-progress-text" style="color:var(--emerald-light); font-size:1.05rem;">0%</strong>
+            </div>
           </div>
         </div>
 
@@ -480,6 +526,15 @@
           </div>
         </div>
 
+        <!-- O'QUVCHINING USTOZGA YUBORGAN SO'ROVLARI -->
+        <div id="student-requests-box" class="glass-box" style="margin-bottom:24px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <h3>📩 Mening ustozga yuborgan so‘rovlarim</h3>
+            <button class="btn btn-primary btn-sm" onclick="openTeacherRequestModal('Dars / Savol')">+ Yangi so‘rov</button>
+          </div>
+          <div id="student-requests-list" style="margin-top:14px;"></div>
+        </div>
+
         <!-- SELECTED SUBJECT AREA -->
         <div id="subject-workspace" style="display:none;"></div>
       </section>
@@ -487,12 +542,18 @@
       <!-- 2. XATOLAR USTIDA ISHLASH -->
       <section id="view-mistakes" class="section-view">
         <div class="glass-box">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-            <div>
-              <h2 style="font-size:1.5rem;">🛠 Xatolar ustida ishlash bo‘limi</h2>
-              <p style="color:var(--text-muted); font-size:0.92rem; margin-top:4px;">Test yoki topshiriqlarda xato javob berilgan savollar shu yerga yig‘iladi. To‘g‘ri javob topsangiz ro‘yxatdan o‘chadi.</p>
+          <div class="action-bar">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" onclick="switchTab('dashboard')">← Orqaga</button>
+              <div>
+                <h2 style="font-size:1.5rem;">🛠 Xatolar ustida ishlash bo‘limi</h2>
+                <p style="color:var(--text-muted); font-size:0.92rem; margin-top:4px;">Test yoki topshiriqlarda xato javob berilgan savollar shu yerga yig‘iladi.</p>
+              </div>
             </div>
-            <button class="btn btn-danger btn-sm" onclick="clearMistakes()">Barchasini tozalash</button>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-ghost btn-sm" onclick="openTeacherRequestModal('Xatolar ustida ishlash')">📩 Ustozga so‘rov yuborish</button>
+              <button class="btn btn-danger btn-sm" onclick="clearMistakes()">Barchasini tozalash</button>
+            </div>
           </div>
           <div id="mistakes-list" style="margin-top:20px;"></div>
         </div>
@@ -500,11 +561,14 @@
 
       <!-- 3. ADMIN PANEL VA BOSHQARUV -->
       <section id="view-admin" class="section-view">
-        <div class="glass-box">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-            <div>
-              <h2 style="font-size:1.5rem;">🛡 Admin panel va boshqaruv</h2>
-              <p style="color:var(--text-muted); font-size:0.92rem; margin-top:4px;">Ro‘yxatdan o‘tgan barcha o‘quvchilarning <strong>Ism Familiyasi</strong>, <strong>noyob parollari</strong> va o‘zlashtirish holati.</p>
+        <div class="glass-box" style="margin-bottom:24px;">
+          <div class="action-bar">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" onclick="switchTab('dashboard')">← Orqaga</button>
+              <div>
+                <h2 style="font-size:1.5rem;">🛡 Admin panel va boshqaruv</h2>
+                <p style="color:var(--text-muted); font-size:0.92rem; margin-top:4px;">Ro‘yxatdan o‘tgan barcha o‘quvchilarning <strong>Ism Familiyasi</strong>, <strong>noyob parollari</strong> va o‘zlashtirish holati.</p>
+              </div>
             </div>
             <div class="meta-pill" style="font-size:0.88rem;">Jami foydalanuvchilar: <strong id="admin-total-users">0</strong></div>
           </div>
@@ -525,6 +589,12 @@
             </table>
           </div>
         </div>
+
+        <div class="glass-box">
+          <h3 style="font-size:1.25rem; margin-bottom:6px;">📩 O‘quvchilardan kelgan ustoz so‘rovlari</h3>
+          <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:14px;">O‘quvchilar yuborgan savol va so‘rovlarga javob bering yoki holatini yangilang.</p>
+          <div id="admin-requests-list"></div>
+        </div>
       </section>
     </div>
   </div>
@@ -535,8 +605,8 @@
        ===================================================================== */
     const STORAGE_USERS_KEY = 'abdulhafiz_academy_users_v1';
     const STORAGE_CURRENT_KEY = 'abdulhafiz_academy_current_v1';
+    const STORAGE_REQUESTS_KEY = 'abdulhafiz_academy_requests_v1';
 
-    // Standart Admin akkaunti (Admin paroli: admin2026)
     function initStorage() {
       let users = JSON.parse(localStorage.getItem(STORAGE_USERS_KEY) || 'null');
       if (!users || !Array.isArray(users) || users.length === 0) {
@@ -553,6 +623,9 @@
         ];
         localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
       }
+      if (!localStorage.getItem(STORAGE_REQUESTS_KEY)) {
+        localStorage.setItem(STORAGE_REQUESTS_KEY, JSON.stringify([]));
+      }
       return users;
     }
 
@@ -567,11 +640,18 @@
       const users = getUsers().map(u => u.id === updated.id ? updated : u);
       saveUsers(users);
     }
+    function getRequests() {
+      initStorage();
+      return JSON.parse(localStorage.getItem(STORAGE_REQUESTS_KEY) || '[]');
+    }
+    function saveRequests(reqs) {
+      localStorage.setItem(STORAGE_REQUESTS_KEY, JSON.stringify(reqs));
+    }
 
     /* =====================================================================
        2. AUTH (BOSHLASH -> PAROL TEKSHIRUV -> ISM FAMILIYA ANIMATSIYA)
        ===================================================================== */
-    let authMode = 'register'; // 'register' | 'login'
+    let authMode = 'register';
     let tempPassword = '';
 
     function openAuthModal(mode) {
@@ -642,7 +722,6 @@
         return;
       }
 
-      // REGISTER: Bir xil parol tekshiruvi
       const duplicate = users.some(u => u.password.toLowerCase() === pass.toLowerCase());
       if (duplicate) {
         showAuthError('Bu parol allaqachon bor, boshqa parol kiriting');
@@ -709,7 +788,99 @@
     }
 
     /* =====================================================================
-       3. O'QUV DASTURLARI (INGLIZ TILI 3 DARAJA, ONA TILI 40, MATEMATIKA 45)
+       3. USTOZGA SO'ROV YUBORISH VA BOSHQARISH
+       ===================================================================== */
+    let currentRequestContext = 'Umumiy bo‘lim';
+
+    function openTeacherRequestModal(contextLabel) {
+      currentRequestContext = contextLabel || 'Umumiy bo‘lim';
+      document.getElementById('req-context-label').textContent = `Kontekst: ${currentRequestContext}`;
+      document.getElementById('req-message').value = '';
+      document.getElementById('req-error').style.display = 'none';
+      document.getElementById('request-modal-backdrop').classList.add('open');
+      setTimeout(() => document.getElementById('req-message').focus(), 100);
+    }
+
+    function closeTeacherRequestModal() {
+      document.getElementById('request-modal-backdrop').classList.remove('open');
+    }
+
+    function submitTeacherRequest() {
+      const user = getCurrentUser();
+      const errEl = document.getElementById('req-error');
+      const msg = document.getElementById('req-message').value.trim();
+      const reqType = document.getElementById('req-type').value;
+
+      if (!user) return;
+      if (!msg) {
+        errEl.textContent = 'Iltimos, ustozga yubormoqchi bo‘lgan so‘rovingizni yozing.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      const reqs = getRequests();
+      reqs.unshift({
+        id: 'req_' + Date.now(),
+        userId: user.id,
+        studentName: `${user.firstName} ${user.lastName}`,
+        context: currentRequestContext,
+        type: reqType,
+        message: msg,
+        status: 'pending',
+        reply: '',
+        createdAt: new Date().toLocaleString('uz-UZ')
+      });
+      saveRequests(reqs);
+      closeTeacherRequestModal();
+      renderStudentRequestsUI();
+      if (user.role === 'admin') renderAdminUI();
+      alert('So‘rovingiz ustozga yuborildi!');
+    }
+
+    function renderStudentRequestsUI() {
+      const user = getCurrentUser();
+      const container = document.getElementById('student-requests-list');
+      if (!user || !container) return;
+
+      const mine = getRequests().filter(r => r.userId === user.id);
+      if (mine.length === 0) {
+        container.innerHTML = `<p style="color:var(--text-muted); font-size:0.9rem;">Siz hali ustozga so‘rov yubormagansiz. Savol yoki yordam kerak bo‘lsa, yuqoridagi tugmani bosing.</p>`;
+        return;
+      }
+
+      container.innerHTML = mine.map(r => `
+        <div class="task-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:6px;">
+            <div>
+              <span class="topic-num">${r.type} • ${r.context}</span>
+              <span style="color:var(--text-muted); font-size:0.78rem; margin-left:8px;">${r.createdAt}</span>
+            </div>
+            <span class="${r.status === 'done' ? 'status-done' : 'status-pending'}">
+              ${r.status === 'done' ? 'Javob berilgan' : 'Ko‘rib chiqilmoqda'}
+            </span>
+          </div>
+          <p style="font-size:0.94rem; color:#f1f5f9;">${r.message}</p>
+          ${r.reply ? `<div class="formula-box" style="margin-top:10px; margin-bottom:0;">Ustoz javobi: ${r.reply}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function replyToRequest(reqId) {
+      const input = document.getElementById(`reply-input-${reqId}`);
+      const replyText = input ? input.value.trim() : '';
+      const reqs = getRequests().map(r => {
+        if (r.id === reqId) {
+          return { ...r, reply: replyText || 'So‘rovingiz qabul qilindi va ko‘rib chiqildi.', status: 'done' };
+        }
+        return r;
+      });
+      saveRequests(reqs);
+      renderAdminUI();
+      renderStudentRequestsUI();
+    }
+
+    /* =====================================================================
+       4. O'QUV DASTURLARI (INGLIZ TILI 3 DARAJA, ONA TILI 40, MATEMATIKA 45)
        ===================================================================== */
     const ENGLISH_LEVELS = [
       {
@@ -836,7 +1007,7 @@
     ];
 
     /* =====================================================================
-       4. TEST VA TOPSHIRIQLAR GENERATORI (HAR BIR MAVZU UCHUN TO'LIQ)
+       5. TEST VA TOPSHIRIQLAR GENERATORI
        ===================================================================== */
     function buildEnglishQuestions(levelObj) {
       const qs = [];
@@ -939,12 +1110,54 @@
     }
 
     /* =====================================================================
-       5. INTERFEYS VA DARS JARAYONLARI BOSHQARUVI
+       6. INTERFEYS, ORQAGA QAYTISH VA DARS JARAYONLARI
        ===================================================================== */
     let activeSubject = null;
     let activeEngLevelIndex = 0;
-    let activeTopicIndex = 0;
     let selectedAnswers = {};
+    let viewState = 'subjects'; // 'subjects' | 'topics' | 'lesson'
+
+    function pushNavHistory(stateObj) {
+      history.pushState(stateObj, '');
+    }
+
+    window.addEventListener('popstate', (event) => {
+      if (!getCurrentUser()) return;
+      const st = event.state;
+      if (!st || st.mode === 'subjects') {
+        closeSubjectWorkspace(false);
+        switchTab('dashboard', false);
+      } else if (st.mode === 'topics') {
+        switchTab('dashboard', false);
+        const listRef = st.subj === 'onatili' ? ONA_TILI_TOPICS : MATH_TOPICS;
+        renderTopicList(st.subj, listRef, false);
+      } else if (st.mode === 'lesson') {
+        switchTab('dashboard', false);
+        openLessonDetail(st.subj, st.idx, false);
+      } else if (st.mode === 'tab') {
+        switchTab(st.tab, false);
+      }
+    });
+
+    function goBackOrDashboard() {
+      if (viewState === 'lesson' && (activeSubject === 'onatili' || activeSubject === 'math')) {
+        const listRef = activeSubject === 'onatili' ? ONA_TILI_TOPICS : MATH_TOPICS;
+        renderTopicList(activeSubject, listRef, true);
+      } else if (viewState === 'topics' || viewState === 'lesson') {
+        closeSubjectWorkspace(true);
+      } else {
+        switchTab('dashboard', true);
+      }
+    }
+
+    function closeSubjectWorkspace(recordHistory = true) {
+      activeSubject = null;
+      viewState = 'subjects';
+      const ws = document.getElementById('subject-workspace');
+      ws.style.display = 'none';
+      ws.innerHTML = '';
+      if (recordHistory) pushNavHistory({ mode: 'subjects' });
+    }
 
     function enterApp() {
       const user = getCurrentUser();
@@ -958,17 +1171,20 @@
       document.getElementById('admin-nav-btn').style.display = user.role === 'admin' ? 'inline-flex' : 'none';
 
       refreshProgressUI();
+      renderStudentRequestsUI();
       renderMistakesUI();
       if (user.role === 'admin') renderAdminUI();
     }
 
-    function switchTab(tabName) {
+    function switchTab(tabName, recordHistory = true) {
       document.querySelectorAll('.nav-tab').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.tab === tabName);
       });
       document.querySelectorAll('.section-view').forEach(sec => sec.classList.remove('active'));
       document.getElementById(`view-${tabName}`).classList.add('active');
 
+      if (recordHistory) pushNavHistory({ mode: 'tab', tab: tabName });
+      if (tabName === 'dashboard') renderStudentRequestsUI();
       if (tabName === 'mistakes') renderMistakesUI();
       if (tabName === 'admin') renderAdminUI();
     }
@@ -995,6 +1211,13 @@
       const badge = document.getElementById('mistakes-badge');
       badge.style.display = mCount > 0 ? 'inline-block' : 'none';
       badge.textContent = mCount;
+
+      const pendingReqs = getRequests().filter(r => r.status === 'pending').length;
+      const reqBadge = document.getElementById('admin-req-badge');
+      if (reqBadge) {
+        reqBadge.style.display = pendingReqs > 0 ? 'inline-block' : 'none';
+        reqBadge.textContent = pendingReqs;
+      }
     }
 
     function openSubject(subj) {
@@ -1004,11 +1227,13 @@
       ws.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
       if (subj === 'english') {
+        viewState = 'lesson';
+        pushNavHistory({ mode: 'lesson', subj: 'english', idx: 0 });
         renderEnglishWorkspace(0);
       } else if (subj === 'onatili') {
-        renderTopicList('onatili', ONA_TILI_TOPICS);
+        renderTopicList('onatili', ONA_TILI_TOPICS, true);
       } else if (subj === 'math') {
-        renderTopicList('math', MATH_TOPICS);
+        renderTopicList('math', MATH_TOPICS, true);
       }
     }
 
@@ -1022,6 +1247,7 @@
 
     function renderEnglishWorkspace(levelIdx) {
       activeEngLevelIndex = levelIdx;
+      viewState = 'lesson';
       selectedAnswers = {};
       const lvl = ENGLISH_LEVELS[levelIdx];
       const questions = buildEnglishQuestions(lvl);
@@ -1032,16 +1258,22 @@
       ws.innerHTML = `
         <div class="glass-box" style="margin-bottom:20px;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-            <div>
-              <span class="topic-num">INGLIZ TILI • 3 BOSQICHLI LUG‘AT</span>
-              <h2 style="font-size:1.5rem; margin-top:4px;">${lvl.level}</h2>
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" onclick="closeSubjectWorkspace(true)">← Orqaga</button>
+              <div>
+                <span class="topic-num">INGLIZ TILI • 3 BOSQICHLI LUG‘AT</span>
+                <h2 style="font-size:1.5rem; margin-top:2px;">${lvl.level}</h2>
+              </div>
             </div>
-            <div class="level-tabs" style="margin:0;">
-              ${ENGLISH_LEVELS.map((l, idx) => `
-                <button class="level-btn ${idx === levelIdx ? 'active' : ''}" onclick="renderEnglishWorkspace(${idx})">
-                  ${idx + 1}-bosqich
-                </button>
-              `).join('')}
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" onclick="openTeacherRequestModal('Ingliz tili • ${lvl.level}')">📩 Ustozga so‘rov yuborish</button>
+              <div class="level-tabs" style="margin:0;">
+                ${ENGLISH_LEVELS.map((l, idx) => `
+                  <button class="level-btn ${idx === levelIdx ? 'active' : ''}" onclick="renderEnglishWorkspace(${idx})">
+                    ${idx + 1}-bosqich
+                  </button>
+                `).join('')}
+              </div>
             </div>
           </div>
         </div>
@@ -1068,7 +1300,7 @@
 
           <div class="glass-box">
             <h3 style="margin-bottom:14px;">✍️ Amaliy topshiriqlar (3 ta)</h3>
-            ${lvl.tasks.map((t, idx) => `
+            ${lvl.tasks.map(t => `
               <div class="task-card">
                 <h4>${t.prompt}</h4>
                 <input type="text" class="form-input task-input" data-ans="${t.answer}" placeholder="Javobingizni yozing..." />
@@ -1087,7 +1319,11 @@
       `;
     }
 
-    function renderTopicList(subj, topics) {
+    function renderTopicList(subj, topics, recordHistory = true) {
+      activeSubject = subj;
+      viewState = 'topics';
+      if (recordHistory) pushNavHistory({ mode: 'topics', subj });
+
       const user = getCurrentUser();
       const done = user ? user.completed : [];
       const title = subj === 'onatili' ? 'Ona tili — 40 ta mavzu' : 'Matematika — 45 ta mavzu';
@@ -1096,16 +1332,25 @@
         : 'Har bir mavzuda nazariya, formula, 5 ta amaliy topshiriq va 10 ta test savoli mavjud.';
 
       const ws = document.getElementById('subject-workspace');
+      ws.style.display = 'block';
       ws.innerHTML = `
         <div class="glass-box">
-          <h2 style="font-size:1.5rem;">${title}</h2>
-          <p style="color:var(--text-muted); margin-top:4px;">${sub}</p>
+          <div class="action-bar">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" onclick="closeSubjectWorkspace(true)">← Orqaga</button>
+              <div>
+                <h2 style="font-size:1.5rem;">${title}</h2>
+                <p style="color:var(--text-muted); margin-top:4px;">${sub}</p>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="openTeacherRequestModal('${subj === 'onatili' ? 'Ona tili' : 'Matematika'}')">📩 Ustozga so‘rov yuborish</button>
+          </div>
           <div class="topics-grid">
             ${topics.map((t, idx) => {
               const id = `${subj}_${idx + 1}`;
               const isDone = done.includes(id);
               return `
-                <div class="topic-item ${isDone ? 'completed' : ''}" onclick="openLessonDetail('${subj}', ${idx})">
+                <div class="topic-item ${isDone ? 'completed' : ''}" onclick="openLessonDetail('${subj}', ${idx}, true)">
                   <div style="display:flex; justify-content:space-between;">
                     <span class="topic-num">${idx + 1}/${topics.length}-mavzu</span>
                     <span>${isDone ? '✅ Tugatilgan' : '▶ Boshlash'}</span>
@@ -1119,22 +1364,30 @@
       `;
     }
 
-    function openLessonDetail(subj, idx) {
-      activeTopicIndex = idx;
+    function openLessonDetail(subj, idx, recordHistory = true) {
+      activeSubject = subj;
+      viewState = 'lesson';
+      if (recordHistory) pushNavHistory({ mode: 'lesson', subj, idx });
+
       selectedAnswers = {};
       const data = subj === 'onatili' ? buildOnaTiliData(idx) : buildMathData(idx);
       window._currentQuestions = data.questions;
       window._currentLessonId = `${subj}_${data.num}`;
 
       const listRef = subj === 'onatili' ? 'ONA_TILI_TOPICS' : 'MATH_TOPICS';
+      const subjLabel = subj === 'onatili' ? 'ONA TILI' : 'MATEMATIKA';
       const ws = document.getElementById('subject-workspace');
+      ws.style.display = 'block';
       ws.innerHTML = `
         <div class="glass-box" style="margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-          <div>
-            <span class="topic-num">${subj === 'onatili' ? 'ONA TILI' : 'MATEMATIKA'} • ${data.num}-MAVZU</span>
-            <h2 style="font-size:1.5rem; margin-top:4px;">${data.title}</h2>
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" onclick="renderTopicList('${subj}', ${listRef}, true)">← Orqaga</button>
+            <div>
+              <span class="topic-num">${subjLabel} • ${data.num}-MAVZU</span>
+              <h2 style="font-size:1.5rem; margin-top:2px;">${data.title}</h2>
+            </div>
           </div>
-          <button class="btn btn-ghost btn-sm" onclick="renderTopicList('${subj}', ${listRef})">← Barcha mavzularga qaytish</button>
+          <button class="btn btn-ghost btn-sm" onclick="openTeacherRequestModal('${subjLabel} • ${data.num}-mavzu: ${data.title.replace(/'/g, "\\'")}')">📩 Ustozga so‘rov yuborish</button>
         </div>
 
         <div class="workspace-grid">
@@ -1221,7 +1474,6 @@
         if (chosen === q.correct) {
           correctCount++;
         } else {
-          // Xatolar ustida ishlash bo'limiga qo'shish
           if (!user.mistakes.some(m => m.id === q.id)) {
             user.mistakes.push({
               id: q.id,
@@ -1252,7 +1504,7 @@
     }
 
     /* =====================================================================
-       6. XATOLAR USTIDA ISHLASH BO'LIMI
+       7. XATOLAR USTIDA ISHLASH BO'LIMI
        ===================================================================== */
     function renderMistakesUI() {
       const user = getCurrentUser();
@@ -1308,7 +1560,7 @@
     }
 
     /* =====================================================================
-       7. ADMIN PANEL (ISM FAMILIYA VA PAROLLARNI KO'RISH)
+       8. ADMIN PANEL (ISM FAMILIYA, PAROLLAR VA USTOZ SO'ROVLARI)
        ===================================================================== */
     function renderAdminUI() {
       const users = getUsers();
@@ -1329,6 +1581,33 @@
           </td>
         </tr>
       `).join('');
+
+      const reqs = getRequests();
+      const reqContainer = document.getElementById('admin-requests-list');
+      if (reqs.length === 0) {
+        reqContainer.innerHTML = `<p style="color:var(--text-muted); font-size:0.9rem;">Hozircha o‘quvchilardan kelgan so‘rovlar yo‘q.</p>`;
+      } else {
+        reqContainer.innerHTML = reqs.map(r => `
+          <div class="task-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:6px;">
+              <div>
+                <strong>${r.studentName}</strong>
+                <span class="topic-num" style="margin-left:8px;">${r.type} • ${r.context}</span>
+                <span style="color:var(--text-muted); font-size:0.78rem; margin-left:8px;">${r.createdAt}</span>
+              </div>
+              <span class="${r.status === 'done' ? 'status-done' : 'status-pending'}">
+                ${r.status === 'done' ? 'Javob berilgan' : 'Kutilmoqda'}
+              </span>
+            </div>
+            <p style="margin-bottom:10px; color:#f1f5f9;">${r.message}</p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <input type="text" id="reply-input-${r.id}" class="form-input" style="flex:1; min-width:220px; padding:9px 12px;" value="${(r.reply || '').replace(/"/g, '&quot;')}" placeholder="Ustoz javobini yozing..." />
+              <button class="btn btn-primary btn-sm" onclick="replyToRequest('${r.id}')">Javobni saqlash</button>
+            </div>
+          </div>
+        `).join('');
+      }
+      refreshProgressUI();
     }
 
     function deleteUserByAdmin(userId) {
@@ -1337,7 +1616,6 @@
       renderAdminUI();
     }
 
-    // Sahifa ochilganda sessiyani tekshirish
     window.addEventListener('DOMContentLoaded', () => {
       initStorage();
       if (getCurrentUser()) {
